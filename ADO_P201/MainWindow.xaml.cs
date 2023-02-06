@@ -76,7 +76,6 @@ namespace ADO_P201
             }
             cmd.Dispose(); // некерований ресурс, вимагає утилізації
         }
-
         private void installProducts_Click(object sender, RoutedEventArgs e)
         {
             SqlCommand cmd = new SqlCommand();
@@ -143,7 +142,7 @@ namespace ADO_P201
         #endregion
 
 
-
+        #region INSERT_DB
         private void insertlDepartments_Click(object sender, RoutedEventArgs e)
         {
             //Команда - інструмент для виконання SQL запитів
@@ -173,9 +172,6 @@ namespace ADO_P201
             }
             cmd.Dispose(); // некерований ресурс, вимагає утилізації
         }
-
-      
-
         private void insertlProducts_Click(object sender, RoutedEventArgs e)
         {
             SqlCommand cmd = new SqlCommand();
@@ -222,9 +218,6 @@ namespace ADO_P201
                     MessageBoxImage.Error);
             }
         }
-
-       
-
         private void insertlManagers_Click(object sender, RoutedEventArgs e)
         {
             SqlCommand cmd = new SqlCommand();
@@ -250,6 +243,8 @@ namespace ADO_P201
                     MessageBoxImage.Exclamation);
             }
         }
+        #endregion
+
 
         #endregion
 
