@@ -162,7 +162,60 @@ VALUES
             {
                 cmd.ExecuteNonQuery();
                 MessageBox.Show(
-                    "Products create",
+                    "Products filled",
+                    "SQL complete",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "SQL error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
+        private void installManagers_Click(object sender, RoutedEventArgs e)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = _connection;
+            cmd.CommandText = @"
+                CREATE TABLE Products (
+                Id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
+                Name NVARCHAR(50) NOT NULL,
+                Price FLOAT NOT NULL);";
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+                MessageBox.Show(
+                    "Managers create",
+                    "SQL complete",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "SQL error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
+        private void insertlManagers_Click(object sender, RoutedEventArgs e)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = _connection;
+            cmd.CommandText = @"";
+            try
+            {
+                cmd.ExecuteNonQuery();
+                MessageBox.Show(
+                    "Managers filled",
                     "SQL complete",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
@@ -184,6 +237,7 @@ VALUES
         {
             ShowMonitorDepartments();
             ShowMonitorProducts();
+            ShowMonitorManagers();
         }
         /// <summary>
         /// Відображає на моніторі кількість відділів (департементів) у БД
@@ -223,6 +277,39 @@ VALUES
         private void ShowMonitorProducts()
         {
             using SqlCommand cmd = new SqlCommand("select Count(*) from Products", _connection);
+            try
+            {
+                var res = cmd.ExecuteScalar(); //повертає "лівий-верхній" результат скаляру
+                //тип повернення - object, оскільки результат може бути довільного типу
+                //для використання результат бажано конвертувати до очікуваного типу
+                int cnt = Convert.ToInt32(res);
+                StatusProducts.Content = cnt.ToString();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "SQL error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+
+                StatusProducts.Content = "--";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Cast error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Exclamation);
+
+                StatusProducts.Content = "--";
+            }
+        }
+
+        private void ShowMonitorManagers()
+        {
+            using SqlCommand cmd = new SqlCommand("select Count(*) from Managers", _connection);
             try
             {
                 var res = cmd.ExecuteScalar(); //повертає "лівий-верхній" результат скаляру

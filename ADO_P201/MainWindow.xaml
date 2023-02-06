@@ -29,6 +29,7 @@
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
             <Label Content="Satus Monitor" Grid.ColumnSpan="2"
                    FontSize="24" FontWeight="DemiBold"
@@ -61,6 +62,15 @@
                    FontSize="20"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"/>
+            <Label Grid.Row="4" Content="Managers: "
+                   FontSize="20"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+            <Label x:Name="StatusManagers" Grid.Column="1"
+                   Grid.Row="4"
+                   FontSize="20"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
         </Grid>
         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0">
             <Label Content="Install DB" FontSize="24" FontWeight="DemiBold"
@@ -68,17 +78,29 @@
             <Button x:Name="installDepartments"
                     Content="Install Departments"
                     FontSize="20" Margin="5" Click="installDepartments_Click"/>
-            <Button x:Name="insertlDepartments"
-                    Content="Insert Departments"
-                    FontSize="20" Margin="5" Click="insertlDepartments_Click"/>
+           
             <Button x:Name="installProducts"
                     Content="Install Products"
                     FontSize="20" Margin="5" Click="installProducts_Click"/>
+
+            <Button x:Name="installManagers"
+                    Content="Install Managers"
+                    FontSize="20" Margin="5" Click="installManagers_Click"/>
+        </StackPanel>
+        
+        <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1">
+            <Label Content="Insert DB" FontSize="24" FontWeight="DemiBold"
+                   HorizontalAlignment="Center"/>
+            <Button x:Name="insertlDepartments"
+                    Content="Insert Departments"
+                    FontSize="20" Margin="5" Click="insertlDepartments_Click"/>
             <Button x:Name="insertlProducts"
                     Content="Insert Products"
                     FontSize="20" Margin="5" Click="insertlProducts_Click"/>
+            <Button x:Name="insertManagers"
+                    Content="Insert Managers"
+                    FontSize="20" Margin="5" Click="insertlManagers_Click"/>
         </StackPanel>
-
 
     </Grid>
 </Window>
