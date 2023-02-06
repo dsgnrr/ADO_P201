@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 
 using System.Data.SqlClient; // не забути про NuGet
@@ -118,6 +119,7 @@ namespace ADO_P201
             try
             {
                 cmd.ExecuteNonQuery();
+                ShowMonitorProducts();
                 MessageBox.Show(
                     "Products create",
                     "SQL complete",
@@ -197,6 +199,7 @@ namespace ADO_P201
             try
             {
                 cmd.ExecuteNonQuery();
+                ShowMonitorManagers();
                 MessageBox.Show(
                     "Managers create",
                     "SQL complete",
@@ -211,6 +214,7 @@ namespace ADO_P201
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
+            
         }
 
         private void insertlManagers_Click(object sender, RoutedEventArgs e)
@@ -220,20 +224,22 @@ namespace ADO_P201
             cmd.CommandText = @"";
             try
             {
+                cmd.CommandText = File.ReadAllText("Managers.sql");
                 cmd.ExecuteNonQuery();
+                ShowMonitorManagers();
                 MessageBox.Show(
                     "Managers filled",
                     "SQL complete",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
             }
-            catch (SqlException ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(
                     ex.Message,
-                    "SQL error",
+                    "IO error",
                     MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                    MessageBoxImage.Exclamation);
             }
         }
 
