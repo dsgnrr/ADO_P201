@@ -18,13 +18,14 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-
+<!--Monitor-->
         <Grid ShowGridLines="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -42,6 +43,24 @@
                    FontSize="20"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"/>
+            <Label Grid.Row="2" Content="Departments: "
+                   FontSize="20"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+            <Label x:Name="StatusDepartments" Grid.Column="1"
+                   Grid.Row="2"
+                   FontSize="20"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+            <Label Grid.Row="3" Content="Products: "
+                   FontSize="20"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+            <Label x:Name="StatusProducts" Grid.Column="1"
+                   Grid.Row="3"
+                   FontSize="20"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
         </Grid>
         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0">
             <Label Content="Install DB" FontSize="24" FontWeight="DemiBold"
@@ -49,15 +68,17 @@
             <Button x:Name="installDepartments"
                     Content="Install Departments"
                     FontSize="20" Margin="5" Click="installDepartments_Click"/>
-        </StackPanel>
-
-        <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1">
-            <Label Content="Insert DB" FontSize="24" FontWeight="DemiBold"
-                   HorizontalAlignment="Center"/>
             <Button x:Name="insertlDepartments"
                     Content="Insert Departments"
                     FontSize="20" Margin="5" Click="insertlDepartments_Click"/>
+            <Button x:Name="installProducts"
+                    Content="Install Products"
+                    FontSize="20" Margin="5" Click="installProducts_Click"/>
+            <Button x:Name="insertlProducts"
+                    Content="Insert Products"
+                    FontSize="20" Margin="5" Click="insertlProducts_Click"/>
         </StackPanel>
+
 
     </Grid>
 </Window>
