@@ -245,6 +245,22 @@ namespace ADO_P201
         }
         #endregion
 
+        #region DROP_DB
+        private void dropDepartments_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void dropProducts_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void dropManagers_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        #endregion
 
         #endregion
 
@@ -255,9 +271,8 @@ namespace ADO_P201
             ShowMonitorProducts();
             ShowMonitorManagers();
         }
-        /// <summary>
-        /// Відображає на моніторі кількість відділів (департементів) у БД
-        /// </summary>
+
+        // Відображає на моніторі кількість відділів (департементів) у БД
         private void ShowMonitorDepartments()
         {
             using SqlCommand cmd = new SqlCommand("select Count(*) from Departments", _connection);
@@ -290,6 +305,7 @@ namespace ADO_P201
                 StatusDepartments.Content = "--";
             }
         }
+        // Відображає на моніторі кількість продуктів у БД
         private void ShowMonitorProducts()
         {
             using SqlCommand cmd = new SqlCommand("select Count(*) from Products", _connection);
@@ -322,7 +338,7 @@ namespace ADO_P201
                 StatusProducts.Content = "--";
             }
         }
-
+        // Відображає на моніторі кількість менеджерів у БД
         private void ShowMonitorManagers()
         {
             using SqlCommand cmd = new SqlCommand("select Count(*) from Managers", _connection);
@@ -358,19 +374,6 @@ namespace ADO_P201
 
         #endregion
 
-        private void dropDepartments_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void dropProducts_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void dropManagers_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+        
     }
 }
