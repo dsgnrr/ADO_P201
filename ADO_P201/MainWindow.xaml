@@ -102,5 +102,18 @@
                     FontSize="20" Margin="5" Click="insertlManagers_Click"/>
         </StackPanel>
 
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1">
+            <Label Content="Drop DB" FontSize="24" FontWeight="DemiBold"
+                   HorizontalAlignment="Center"/>
+            <Button x:Name="dropDepartments"
+                    Content="Drop Departments"
+                    FontSize="20" Margin="5" Click="dropDepartments_Click"/>
+            <Button x:Name="dropProducts"
+                    Content="Drop Products"
+                    FontSize="20" Margin="5" Click="dropProducts_Click"/>
+            <Button x:Name="dropManagers"
+                    Content="Drop Managers"
+                    FontSize="20" Margin="5" Click="dropManagers_Click"/>
+        </StackPanel>
     </Grid>
 </Window>

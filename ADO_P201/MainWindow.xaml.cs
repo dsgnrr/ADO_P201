@@ -24,7 +24,7 @@ namespace ADO_P201
             Integrated Security=True";
 
         }
-
+        #region WINDOW_EVENTS
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             try
@@ -48,9 +48,11 @@ namespace ADO_P201
             if (_connection?.State == System.Data.ConnectionState.Open)
                 _connection.Close();
         }
+        #endregion
 
         #region Запити без повернення результатів
 
+        #region INSTALL_DB
         private void installDepartments_Click(object sender, RoutedEventArgs e)
         {
             //Команда - інструмент для виконання SQL запитів
@@ -67,37 +69,6 @@ namespace ADO_P201
             {
                 cmd.ExecuteNonQuery(); // NonQuery - без повернення результату
                 MessageBox.Show("Create OK");
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            cmd.Dispose(); // некерований ресурс, вимагає утилізації
-        }
-
-
-        private void insertlDepartments_Click(object sender, RoutedEventArgs e)
-        {
-            //Команда - інструмент для виконання SQL запитів
-            SqlCommand cmd = new SqlCommand();
-            //Головні параметри команди:
-            cmd.Connection = _connection; //підключення (відкрите)
-            cmd.CommandText = // SQL запит (текст)
-                @"INSERT INTO Departments 
-	                        ( Id, Name )
-                VALUES 
-	            ( 'D3C376E4-BCE3-4D85-ABA4-E3CF49612C94',  N'IT отдел'		 	 ), 
-	            ( '131EF84B-F06E-494B-848F-BB4BC0604266',  N'Бухгалтерия'		 ), 
-	            ( '8DCC3969-1D93-47A9-8B79-A30C738DB9B4',  N'Служба безопасности'), 
-	            ( 'D2469412-0E4B-46F7-80EC-8C522364D099',  N'Отдел кадров'		 ),
-	            ( '1EF7268C-43A8-488C-B761-90982B31DF4E',  N'Канцелярия'		 ), 
-	            ( '415B36D9-2D82-4A92-A313-48312F8E18C6',  N'Отдел продаж'		 ), 
-	            ( '624B3BB5-0F2C-42B6-A416-099AAB799546',  N'Юридическая служба' )";
-
-            try//виконання команди
-            {
-                cmd.ExecuteNonQuery(); // NonQuery - без повернення результату
-                MessageBox.Show("Insert OK");
             }
             catch (SqlException ex)
             {
@@ -135,6 +106,75 @@ namespace ADO_P201
                     MessageBoxImage.Error);
             }
         }
+        private void installManagers_Click(object sender, RoutedEventArgs e)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = _connection;
+            cmd.CommandText = @"CREATE TABLE Managers (
+	            Id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
+	            Surname		NVARCHAR(50) NOT NULL,
+	            Name		NVARCHAR(50) NOT NULL,
+	            Secname		NVARCHAR(50) NOT NULL,
+	            Id_main_dep UNIQUEIDENTIFIER NOT NULL REFERENCES Departments( Id ),
+	            Id_sec_dep	UNIQUEIDENTIFIER REFERENCES Departments( Id ),
+	            Id_chief	UNIQUEIDENTIFIER);";
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+                ShowMonitorManagers();
+                MessageBox.Show(
+                    "Managers create",
+                    "SQL complete",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "SQL error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+
+        }
+
+        #endregion
+
+
+
+        private void insertlDepartments_Click(object sender, RoutedEventArgs e)
+        {
+            //Команда - інструмент для виконання SQL запитів
+            SqlCommand cmd = new SqlCommand();
+            //Головні параметри команди:
+            cmd.Connection = _connection; //підключення (відкрите)
+            cmd.CommandText = // SQL запит (текст)
+                @"INSERT INTO Departments 
+	                        ( Id, Name )
+                VALUES 
+	            ( 'D3C376E4-BCE3-4D85-ABA4-E3CF49612C94',  N'IT отдел'		 	 ), 
+	            ( '131EF84B-F06E-494B-848F-BB4BC0604266',  N'Бухгалтерия'		 ), 
+	            ( '8DCC3969-1D93-47A9-8B79-A30C738DB9B4',  N'Служба безопасности'), 
+	            ( 'D2469412-0E4B-46F7-80EC-8C522364D099',  N'Отдел кадров'		 ),
+	            ( '1EF7268C-43A8-488C-B761-90982B31DF4E',  N'Канцелярия'		 ), 
+	            ( '415B36D9-2D82-4A92-A313-48312F8E18C6',  N'Отдел продаж'		 ), 
+	            ( '624B3BB5-0F2C-42B6-A416-099AAB799546',  N'Юридическая служба' )";
+
+            try//виконання команди
+            {
+                cmd.ExecuteNonQuery(); // NonQuery - без повернення результату
+                MessageBox.Show("Insert OK");
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            cmd.Dispose(); // некерований ресурс, вимагає утилізації
+        }
+
+      
 
         private void insertlProducts_Click(object sender, RoutedEventArgs e)
         {
@@ -183,39 +223,7 @@ namespace ADO_P201
             }
         }
 
-        private void installManagers_Click(object sender, RoutedEventArgs e)
-        {
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = _connection;
-            cmd.CommandText = @"CREATE TABLE Managers (
-	            Id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
-	            Surname		NVARCHAR(50) NOT NULL,
-	            Name		NVARCHAR(50) NOT NULL,
-	            Secname		NVARCHAR(50) NOT NULL,
-	            Id_main_dep UNIQUEIDENTIFIER NOT NULL REFERENCES Departments( Id ),
-	            Id_sec_dep	UNIQUEIDENTIFIER REFERENCES Departments( Id ),
-	            Id_chief	UNIQUEIDENTIFIER);";
-
-            try
-            {
-                cmd.ExecuteNonQuery();
-                ShowMonitorManagers();
-                MessageBox.Show(
-                    "Managers create",
-                    "SQL complete",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show(
-                    ex.Message,
-                    "SQL error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-            }
-            
-        }
+       
 
         private void insertlManagers_Click(object sender, RoutedEventArgs e)
         {
@@ -352,8 +360,22 @@ namespace ADO_P201
                 StatusManagers.Content = "--";
             }
         }
+
         #endregion
 
+        private void dropDepartments_Click(object sender, RoutedEventArgs e)
+        {
 
+        }
+
+        private void dropProducts_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void dropManagers_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
