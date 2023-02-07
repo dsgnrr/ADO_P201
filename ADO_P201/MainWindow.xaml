@@ -72,48 +72,149 @@
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"/>
         </Grid>
-        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0">
-            <Label Content="Install DB" FontSize="24" FontWeight="DemiBold"
+        <!--Manage DB-->
+        <Grid Grid.Row="1" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.25*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label Content="Manage DB" FontSize="24" FontWeight="DemiBold"
                    HorizontalAlignment="Center"/>
-            <Button x:Name="installDepartments"
-                    Content="Install Departments"
-                    FontSize="20" Margin="5" Click="installDepartments_Click"/>
-           
-            <Button x:Name="installProducts"
-                    Content="Install Products"
-                    FontSize="20" Margin="5" Click="installProducts_Click"/>
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="installDepartments" Margin="5" Click="installDepartments_Click">
+                    <Button.Content>
+                        <TextBlock
+                            Text="Install Departments"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap"/>
+                    </Button.Content>
+                </Button>
 
-            <Button x:Name="installManagers"
-                    Content="Install Managers"
-                    FontSize="20" Margin="5" Click="installManagers_Click"/>
-        </StackPanel>
+                <Button x:Name="installProducts"
+                     Margin="5" Click="installProducts_Click"
+                        Grid.Row="1">
+                    <Button.Content>
+                        <TextBlock
+                            Text="Install Products"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap"/>
+                    </Button.Content>
+                </Button>
+
+                <Button x:Name="installManagers"
+                     Margin="5" Click="installManagers_Click"
+                        Grid.Row="2">
+                    <Button.Content>
+                        <TextBlock
+                            Text="Install Managers"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap"/>
+                    </Button.Content>
+                </Button>
+                <!--Content="Insert Departments"-->
+                <Button x:Name="insertlDepartments"
+                        Margin="5" 
+                        Click="insertlDepartments_Click"
+                        Grid.Column="1"
+                        Grid.Row="0">
+                    <Button.Content>
+                        <TextBlock
+                            Text="Insert Departments"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap"/>
+                    </Button.Content>
+                </Button>
+                <!--Content="Insert Products"-->
+                <Button x:Name="insertlProducts"
+                        Margin="5" 
+                        Click="insertlProducts_Click"
+                        Grid.Column="1"
+                        Grid.Row="1">
+                    <Button.Content>
+                        <TextBlock
+                            Text="Insert Products"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap"/>
+                    </Button.Content>
+                </Button>
+                <!--Content="Insert Managers"-->
+                <Button x:Name="insertManagers"
+                        Margin="5" 
+                        Click="insertlManagers_Click"
+                        Grid.Column="1"
+                        Grid.Row="2">
+                    <Button.Content>
+                        <TextBlock
+                            Text="Insert Managers"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap"/>
+                    </Button.Content>
+                </Button>
+                <!--Content="Drop Departments"-->
+                <Button x:Name="dropDepartments"
+                        Margin="5" 
+                        Grid.Column="2"
+                        Grid.Row="0"
+                        Click="dropDepartments_Click">
+                    <Button.Content>
+                        <TextBlock
+                            Text="Drop Departments"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap"/>
+                    </Button.Content>
+                </Button>
+
+                <!--Content="Drop Products"-->
+                <Button x:Name="dropProducts"
+                        Margin="5"
+                        Grid.Column="2"
+                        Grid.Row="1"
+                        Click="dropProducts_Click">
+                    <Button.Content>
+                        <TextBlock
+                            Text="Drop Products"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap"/>
+                    </Button.Content>
+                </Button>
+
+                <!--ontent="Drop Managers"-->
+                <Button x:Name="dropManagers"
+                        Margin="5"
+                        Grid.Column="2"
+                        Grid.Row="2"
+                        Click="dropManagers_Click">
+                    <Button.Content>
+                        <TextBlock
+                            Text="Drop Managers"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap"/>
+                    </Button.Content>
+                </Button>
+
+            </Grid>
+            
+        </Grid>
+       
         
+        <!--Departments-->
         <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1">
-            <Label Content="Insert DB" FontSize="24" FontWeight="DemiBold"
+            <Label Content="Departments" FontSize="24" FontWeight="DemiBold"
                    HorizontalAlignment="Center"/>
-            <Button x:Name="insertlDepartments"
-                    Content="Insert Departments"
-                    FontSize="20" Margin="5" Click="insertlDepartments_Click"/>
-            <Button x:Name="insertlProducts"
-                    Content="Insert Products"
-                    FontSize="20" Margin="5" Click="insertlProducts_Click"/>
-            <Button x:Name="insertManagers"
-                    Content="Insert Managers"
-                    FontSize="20" Margin="5" Click="insertlManagers_Click"/>
-        </StackPanel>
-
-        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1">
-            <Label Content="Drop DB" FontSize="24" FontWeight="DemiBold"
-                   HorizontalAlignment="Center"/>
-            <Button x:Name="dropDepartments"
-                    Content="Drop Departments"
-                    FontSize="20" Margin="5" Click="dropDepartments_Click"/>
-            <Button x:Name="dropProducts"
-                    Content="Drop Products"
-                    FontSize="20" Margin="5" Click="dropProducts_Click"/>
-            <Button x:Name="dropManagers"
-                    Content="Drop Managers"
-                    FontSize="20" Margin="5" Click="dropManagers_Click"/>
+            <ScrollViewer MaxHeight="175" MaxWidth="265"
+                          HorizontalScrollBarVisibility="Visible">
+                <TextBlock x:Name="ViewDepartments"/>
+            </ScrollViewer>
         </StackPanel>
     </Grid>
 </Window>

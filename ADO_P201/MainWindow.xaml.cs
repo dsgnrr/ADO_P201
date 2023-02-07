@@ -12,19 +12,28 @@ namespace ADO_P201
     {
         //об'єкт підключення: головний елемент ADO
         private SqlConnection _connection;
+
         public MainWindow()
         {
             InitializeComponent();
             //!! Створення об'єкта не відкриває підключення
             _connection = new SqlConnection();
             // Головний параметр підключення - рядок підключення
+            //STEP
             _connection.ConnectionString = @"
             Data Source=(LocalDB)\MSSQLLocalDB;
-            AttachDbFilename=C:\Users\dsgnrr\source\repos\ADO_P201\ADO_P201\ADO201.mdf;
+            AttachDbFilename=C:\Users\Seme_i7uf\Documents\GitHub\ADO_P201\ADO_P201\ADO201.mdf;
             Integrated Security=True";
+            //HOME
+            //_connection.ConnectionString = @"
+            //Data Source=(LocalDB)\MSSQLLocalDB;
+            //AttachDbFilename=C:\Users\dsgnrr\source\repos\ADO_P201\ADO_P201\ADO201.mdf;
+            //Integrated Security=True";
 
         }
+
         #region WINDOW_EVENTS
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             try
@@ -41,6 +50,7 @@ namespace ADO_P201
                 this.Close();
             }
             ShowMonitor();
+            ShowDepartments();
         }
 
         private void Window_Closed(object sender, System.EventArgs e)
@@ -48,6 +58,7 @@ namespace ADO_P201
             if (_connection?.State == System.Data.ConnectionState.Open)
                 _connection.Close();
         }
+
         #endregion
 
         #region Запити без повернення результатів
@@ -140,7 +151,6 @@ namespace ADO_P201
         }
 
         #endregion
-
 
         #region INSERT_DB
         private void insertlDepartments_Click(object sender, RoutedEventArgs e)
@@ -248,17 +258,68 @@ namespace ADO_P201
         #region DROP_DB
         private void dropDepartments_Click(object sender, RoutedEventArgs e)
         {
-
+            using SqlCommand cmd = new("drop table Departments", _connection);
+            try
+            {
+                cmd.ExecuteNonQuery();
+                MessageBox.Show(
+                    "Departments dropped",
+                    "SQL complete",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(
+                  ex.Message+" Delete Managers first",
+                  "Drop error",
+                  MessageBoxButton.OK,
+                  MessageBoxImage.Exclamation);
+            }
         }
 
         private void dropProducts_Click(object sender, RoutedEventArgs e)
         {
-
+            using SqlCommand cmd = new("drop table Products", _connection);
+            try
+            {
+                cmd.ExecuteNonQuery();
+                MessageBox.Show(
+                    "Products dropped",
+                    "SQL complete",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                  ex.Message,
+                  "Drop error",
+                  MessageBoxButton.OK,
+                  MessageBoxImage.Exclamation);
+            }
         }
 
         private void dropManagers_Click(object sender, RoutedEventArgs e)
         {
-
+            using SqlCommand cmd = new("drop table Managers", _connection);
+            try
+            {
+                cmd.ExecuteNonQuery();
+                MessageBox.Show(
+                    "Managers dropped",
+                    "SQL complete",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                  ex.Message,
+                  "Drop error",
+                  MessageBoxButton.OK,
+                  MessageBoxImage.Exclamation);
+            }
         }
         #endregion
 
@@ -271,7 +332,6 @@ namespace ADO_P201
             ShowMonitorProducts();
             ShowMonitorManagers();
         }
-
         // Відображає на моніторі кількість відділів (департементів) у БД
         private void ShowMonitorDepartments()
         {
@@ -374,6 +434,50 @@ namespace ADO_P201
 
         #endregion
 
+        #region Запити із результатами
         
+        private String shortString(string text)
+        {
+            string result = "";
+            result += text.Substring(0, 4);
+            result += "...";
+            int length = text.Length-1;
+            result += text.Substring(length-3);
+            return result;
+        }
+
+        private void ShowDepartments()
+        {
+            using SqlCommand cmd = new("SELECT * FROM Departments", _connection);
+            try
+            {
+                SqlDataReader reader = cmd.ExecuteReader();
+                /* reader - інструмент для передачі даних від БД до програми.
+                 * Принцип - передача по одному рядку (табличного результату)
+                 * команда reader.Read() передає рядок. Дані залишаются у reader
+                 * Для доступу до даних викорситовується:
+                 * а) get-тери на кшталт reader.GetGuid(0);
+                 * б) індексатори типу reader[1]
+                 * індекси(0,1) - це порядкові індекси полів у запиті
+                 */
+                string str = "";
+                while(reader.Read())
+                {
+                    str += shortString(reader.GetGuid(0).ToString()) + " " + reader.GetString(1) + "\n";
+                }
+                ViewDepartments.Text = str;
+                reader.Close(); // не закритий reader блокує інші команди
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Query error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
+        #endregion
     }
 }
