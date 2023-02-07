@@ -4,7 +4,7 @@ using System.Windows;
 
 using System.Data.SqlClient; // не забути про NuGet
 using System.Windows.Media;
-
+using System.Windows.Controls;
 
 namespace ADO_P201
 {
@@ -20,15 +20,15 @@ namespace ADO_P201
             _connection = new SqlConnection();
             // Головний параметр підключення - рядок підключення
             //STEP
-            _connection.ConnectionString = @"
-            Data Source=(LocalDB)\MSSQLLocalDB;
-            AttachDbFilename=C:\Users\Seme_i7uf\Documents\GitHub\ADO_P201\ADO_P201\ADO201.mdf;
-            Integrated Security=True";
-            //HOME
             //_connection.ConnectionString = @"
             //Data Source=(LocalDB)\MSSQLLocalDB;
-            //AttachDbFilename=C:\Users\dsgnrr\source\repos\ADO_P201\ADO_P201\ADO201.mdf;
+            //AttachDbFilename=C:\Users\Seme_i7uf\Documents\GitHub\ADO_P201\ADO_P201\ADO201.mdf;
             //Integrated Security=True";
+            //HOME
+            _connection.ConnectionString = @"
+            Data Source=(LocalDB)\MSSQLLocalDB;
+            AttachDbFilename=C:\Users\dsgnrr\source\repos\ADO_P201\ADO_P201\ADO201.mdf;
+            Integrated Security=True";
 
         }
 
@@ -51,6 +51,7 @@ namespace ADO_P201
             }
             ShowMonitor();
             ShowDepartments();
+            ShowManagers();
         }
 
         private void Window_Closed(object sender, System.EventArgs e)
@@ -444,6 +445,51 @@ namespace ADO_P201
             int length = text.Length-1;
             result += text.Substring(length-3);
             return result;
+        }
+        TextBlock createTextBlock(string text)
+        {
+            TextBlock block= new TextBlock();
+            block.Text = text;
+            block.TextAlignment = TextAlignment.Center;
+            block.TextWrapping = TextWrapping.Wrap;
+            block.FontSize = 15;
+            return block;
+        }
+        void ManagersViewer(SqlDataReader reader,int count)
+        {
+            RowDefinition row = new RowDefinition();
+            Viewer.RowDefinitions.Add(row);
+            for(int i=0;i<4;i++)
+            {
+                var textBlock = createTextBlock(reader.GetString(i));
+                Grid.SetRow(textBlock, count);
+                Grid.SetColumn(textBlock, i);
+                Viewer.Children.Add(textBlock);
+            }
+        }
+
+        private void ShowManagers()
+        {
+            using SqlCommand cmd = new("SELECT Surname, Managers.Name, Secname, Departments.Name FROM Managers INNER JOIN Departments ON Managers.Id_sec_dep=Departments.Id",_connection);
+            try
+            {
+                SqlDataReader reader = cmd.ExecuteReader();
+                int count = 0;
+                while (reader.Read())
+                {
+                    count++;
+                    ManagersViewer(reader,count);
+                }
+                reader.Close();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Query error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
         }
 
         private void ShowDepartments()

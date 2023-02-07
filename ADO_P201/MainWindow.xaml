@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         Closed="Window_Closed"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="900">
     <Grid ShowGridLines="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -214,6 +214,46 @@
             <ScrollViewer MaxHeight="175" MaxWidth="265"
                           HorizontalScrollBarVisibility="Visible">
                 <TextBlock x:Name="ViewDepartments"/>
+            </ScrollViewer>
+        </StackPanel>
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1">
+            <Label Content="Managers" FontSize="24" FontWeight="DemiBold"
+                   HorizontalAlignment="Center"/>
+            <ScrollViewer MaxHeight="160" MaxWidth="300"
+                          VerticalScrollBarVisibility="Visible"
+                          HorizontalScrollBarVisibility="Visible">
+                <Grid x:Name="Viewer" ShowGridLines="True">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Grid.Column="0"
+                        Text="Name"
+                        FontSize="17"
+                        TextWrapping="Wrap"
+                        TextAlignment="Center"/>
+                    <TextBlock
+                        Grid.Column="1"
+                        Text="Surname"
+                        FontSize="17"
+                        TextWrapping="Wrap"
+                        TextAlignment="Center"/>
+                    <TextBlock
+                        Grid.Column="2"
+                        Text="Secname"
+                        FontSize="17"
+                        TextWrapping="Wrap"
+                        TextAlignment="Center"/>
+                    <TextBlock
+                        Grid.Column="3"
+                        Text="Department"
+                        FontSize="17"
+                        TextWrapping="Wrap"
+                        TextAlignment="Center"/>
+                </Grid>
             </ScrollViewer>
         </StackPanel>
     </Grid>
