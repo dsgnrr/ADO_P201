@@ -20,15 +20,15 @@ namespace ADO_P201
             _connection = new SqlConnection();
             // Головний параметр підключення - рядок підключення
             //STEP
-            //_connection.ConnectionString = @"
-            //Data Source=(LocalDB)\MSSQLLocalDB;
-            //AttachDbFilename=C:\Users\Seme_i7uf\Documents\GitHub\ADO_P201\ADO_P201\ADO201.mdf;
-            //Integrated Security=True";
-            //HOME
             _connection.ConnectionString = @"
             Data Source=(LocalDB)\MSSQLLocalDB;
-            AttachDbFilename=C:\Users\dsgnrr\source\repos\ADO_P201\ADO_P201\ADO201.mdf;
+            AttachDbFilename=C:\Users\Seme_i7uf\Documents\GitHub\ADO_P201\ADO_P201\ADO201.mdf;
             Integrated Security=True";
+            //HOME
+            //_connection.ConnectionString = @"
+            //Data Source=(LocalDB)\MSSQLLocalDB;
+            //AttachDbFilename=C:\Users\dsgnrr\source\repos\ADO_P201\ADO_P201\ADO201.mdf;
+            //Integrated Security=True";
 
         }
 
@@ -52,6 +52,7 @@ namespace ADO_P201
             ShowMonitor();
             ShowDepartments();
             ShowManagers();
+            ShowProducts();
         }
 
         private void Window_Closed(object sender, System.EventArgs e)
@@ -459,13 +460,33 @@ namespace ADO_P201
         {
             RowDefinition row = new RowDefinition();
             Viewer.RowDefinitions.Add(row);
-            for(int i=0;i<4;i++)
+            for (int i = 0; i < 4; i++)
             {
                 var textBlock = createTextBlock(reader.GetString(i));
                 Grid.SetRow(textBlock, count);
                 Grid.SetColumn(textBlock, i);
                 Viewer.Children.Add(textBlock);
             }
+        }
+        void ProductViewer(SqlDataReader reader, int count)
+        {
+            RowDefinition row = new RowDefinition();
+            ProductsViewer.RowDefinitions.Add(row);
+            var textBlock = createTextBlock(shortString(reader.GetGuid(0).ToString()));
+            Grid.SetRow(textBlock, count);
+            Grid.SetColumn(textBlock, 0);
+            ProductsViewer.Children.Add(textBlock);
+
+            textBlock = createTextBlock(reader.GetString(1));
+            Grid.SetRow(textBlock, count);
+            Grid.SetColumn(textBlock, 1);
+            ProductsViewer.Children.Add(textBlock);
+
+            textBlock = createTextBlock(reader.GetDouble(2).ToString());
+            Grid.SetRow(textBlock, count);
+            Grid.SetColumn(textBlock, 2);
+            ProductsViewer.Children.Add(textBlock);
+
         }
 
         private void ShowManagers()
@@ -479,6 +500,29 @@ namespace ADO_P201
                 {
                     count++;
                     ManagersViewer(reader,count);
+                }
+                reader.Close();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Query error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+        private void ShowProducts()
+        {
+            using SqlCommand cmd = new("SELECT * FROM Products", _connection);
+            try
+            {
+                SqlDataReader reader = cmd.ExecuteReader();
+                int count = 0;
+                while (reader.Read())
+                {
+                    count++;
+                    ProductViewer(reader, count);
                 }
                 reader.Close();
             }
