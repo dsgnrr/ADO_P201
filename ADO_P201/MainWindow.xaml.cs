@@ -437,7 +437,8 @@ namespace ADO_P201
         #endregion
 
         #region Запити із результатами
-        
+
+        #region ЕЛЕМЕНТИ_КЕРУВАННЯ
         private String shortString(string text)
         {
             string result = "";
@@ -456,6 +457,9 @@ namespace ADO_P201
             block.FontSize = 15;
             return block;
         }
+        #endregion
+
+        //МАЛЮЄ ТАБЛИЦЮ ДЛЯ МЕНЕДЖЕРІВ
         void ManagersViewer(SqlDataReader reader,int count)
         {
             RowDefinition row = new RowDefinition();
@@ -468,6 +472,7 @@ namespace ADO_P201
                 Viewer.Children.Add(textBlock);
             }
         }
+        //МАЛЮЄ ТАБЛИЦЮ ДЛЯ ПРОДУКТІВ
         void ProductViewer(SqlDataReader reader, int count)
         {
             RowDefinition row = new RowDefinition();
@@ -488,7 +493,7 @@ namespace ADO_P201
             ProductsViewer.Children.Add(textBlock);
 
         }
-
+        //ВІДОБРАЖАЄ ТАБЛИЦЮ З МЕНЕДЖЕРАМИ
         private void ShowManagers()
         {
             using SqlCommand cmd = new("SELECT Surname, Managers.Name, Secname, Departments.Name FROM Managers INNER JOIN Departments ON Managers.Id_sec_dep=Departments.Id",_connection);
@@ -512,6 +517,7 @@ namespace ADO_P201
                     MessageBoxImage.Error);
             }
         }
+        //ВІДОБРАЖАЄ ТАБЛИЦЮ З ПРОДУКТАМИ
         private void ShowProducts()
         {
             using SqlCommand cmd = new("SELECT * FROM Products", _connection);
@@ -535,7 +541,7 @@ namespace ADO_P201
                     MessageBoxImage.Error);
             }
         }
-
+        //ВІДОБРАЖАЄ ДЕПАРТМЕНТИ
         private void ShowDepartments()
         {
             using SqlCommand cmd = new("SELECT * FROM Departments", _connection);
