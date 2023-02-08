@@ -11,7 +11,11 @@ namespace ADO_P201.Entity
     public class Department
     {
         public Guid Id { get; set; }
-        public String name { get; set; }
+        public String Name { get; set; }
 
+        public override string ToString()
+        {
+            return Id.ToString()[..5] + "..." + Name;
+        }
     }
 }

@@ -19,17 +19,7 @@ namespace ADO_P201
             //!! Створення об'єкта не відкриває підключення
             _connection = new SqlConnection();
             // Головний параметр підключення - рядок підключення
-            //STEP
-            _connection.ConnectionString = @"
-            Data Source=(LocalDB)\MSSQLLocalDB;
-            AttachDbFilename=C:\Users\Seme_i7uf\Documents\GitHub\ADO_P201\ADO_P201\ADO201.mdf;
-            Integrated Security=True";
-            //HOME
-            //_connection.ConnectionString = @"
-            //Data Source=(LocalDB)\MSSQLLocalDB;
-            //AttachDbFilename=C:\Users\dsgnrr\source\repos\ADO_P201\ADO_P201\ADO201.mdf;
-            //Integrated Security=True";
-
+            _connection.ConnectionString = App.ConnectionString;
         }
 
         #region WINDOW_EVENTS

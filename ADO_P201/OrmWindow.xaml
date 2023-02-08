@@ -21,7 +21,23 @@
             <Label Content="Відділи" HorizontalAlignment="Center"
                    FontSize="22" FontWeight="DemiBold"/>
             <ListView ItemsSource="{Binding Departments}">
-                
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn
+                            Header="Id"
+                            DisplayMemberBinding="{Binding Path=Id}"/>
+                        <GridViewColumn
+                            Header="Name"
+                            DisplayMemberBinding="{Binding Path=Name}"/>
+                    </GridView>
+                </ListView.View>
+                <ListView.Resources>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <EventSetter
+                            Event="MouseDoubleClick"
+                            Handler="ListViewItem_MouseDoubleClick"/>
+                    </Style>
+                </ListView.Resources>
             </ListView>
         </StackPanel>
     </Grid>
