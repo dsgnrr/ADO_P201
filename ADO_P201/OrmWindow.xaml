@@ -40,5 +40,32 @@
                 </ListView.Resources>
             </ListView>
         </StackPanel>
+        <StackPanel Orientation="Vertical"
+                    Grid.Row="0" Grid.Column="1">
+            <Label Content="Товари" HorizontalAlignment="Center"
+                   FontSize="22" FontWeight="DemiBold"/>
+            <ListView ItemsSource="{Binding Products}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn
+                            Header="Id"
+                            DisplayMemberBinding="{Binding Path=Id}"/>
+                        <GridViewColumn
+                            Header="Name"
+                            DisplayMemberBinding="{Binding Path=Name}"/>
+                        <GridViewColumn
+                            Header="Price"
+                            DisplayMemberBinding="{Binding Path=Price}"/>
+                    </GridView>
+                </ListView.View>
+                <ListView.Resources>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <EventSetter
+                            Event="MouseDoubleClick"
+                            Handler="ListViewItem_MouseDoubleClick_1"/>
+                    </Style>
+                </ListView.Resources>
+            </ListView>
+        </StackPanel>
     </Grid>
 </Window>

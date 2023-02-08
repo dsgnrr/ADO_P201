@@ -19,13 +19,15 @@ namespace ADO_P201
 
     public partial class OrmWindow : Window
     {
-        public ObservableCollection<Entity.Department> Departments { get; set; }
+        public ObservableCollection<Entity.Department> Departments { get; set; } 
+        public ObservableCollection<Entity.Product> Products { get; set; }
         private SqlConnection _connection;
 
         public OrmWindow()
         {
             InitializeComponent();
             Departments = new();
+            Products = new();
             DataContext = this;
             _connection = new(App.ConnectionString);
         }
@@ -53,8 +55,24 @@ namespace ADO_P201
                 reader.Close();
 
                 #endregion
-               
-                cmd.Dispose();
+
+                #region Load Products
+                cmd.CommandText = "SELECT P.Id, P.Name, P.Price FROM Products P";
+
+                reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Products.Add(new Entity.Product
+                    {
+                        Id = reader.GetGuid(0),
+                        Name = reader.GetString(1),
+                        Price = reader.GetDouble(2)
+                    });
+                }
+                reader.Close();
+                #endregion
+
+                //cmd.Dispose();
             }
             catch (SqlException ex)
             {
@@ -79,12 +97,23 @@ namespace ADO_P201
                 }
             }
         }
+
+        private void ListViewItem_MouseDoubleClick_1(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is ListViewItem item)
+            {
+                if (item.Content is Entity.Product product)
+                {
+                    MessageBox.Show(product.ToString());
+                }
+            }
+        }
         /* D.z. Реалізувати ORM для таблиці Products
-         * утворити сутність
-         * оголосити колекцію
-         * заповнити колекцію
-         * реалізувати її відображення
-         * реалізувати "зворотній зв'язок" - передача даних з View до програми
-         */
+* утворити сутність
+* оголосити колекцію
+* заповнити колекцію
+* реалізувати її відображення
+* реалізувати "зворотній зв'язок" - передача даних з View до програми
+*/
     }
 }
