@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:ADO_P201"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
-        Title="OrmWindow" Height="450" Width="800">
+        Title="OrmWindow" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen">
     <Grid ShowGridLines="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>

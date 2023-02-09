@@ -1,14 +1,11 @@
-﻿<Window x:Class="ADO_P201.DepartmentCrudWindow"
+﻿<Window x:Class="ADO_P201.NewDepartmentWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ADO_P201"
         mc:Ignorable="d"
-        Title="DepartmentCrudWindow" Height="200" Width="400"
-        Loaded="Window_Loaded"
-        Closed="Window_Closed"
-        Background="#1f1f1f"
+        Title="NewDepartmentWindow" Height="200" Width="400" Background="#1f1f1f"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
@@ -20,7 +17,7 @@
             FontSize="20"
             Margin="5"
             Foreground="White"
-            Text="EDIT DEPARTMENTS"
+            Text="CREATE DEPARTMENT"
             FontWeight="Bold"/>
         <StackPanel Orientation="Vertical" Grid.Row="1">
             <!--ID-->
@@ -88,19 +85,17 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Button
+                <!--<Button
                     x:Name="SaveButton"
                     Content="Save"
                         Background="DarkGreen"
-                        MouseEnter="SaveButton_MouseEnter"
-                        MouseLeave="SaveButton_MouseLeave"
                         Foreground="White"
                         FontSize="15"
                         BorderThickness="0"
                         Grid.Column="0"
                         Margin="5"
                         Click="SaveButton_Click"/>
-                
+
                 <Button Content="Delete"
                         x:Name="DeleteButton"
                         Background="Orange"
@@ -110,7 +105,7 @@
                         Grid.Column="1"
                         Margin="5"
                         Click="DeleteButton_Click"/>
-                
+
                 <Button Content="Cancel"
                         x:Name="CancelButton"
                         Background="DarkRed"
@@ -119,9 +114,9 @@
                         BorderThickness="0"
                         Grid.Column="2"
                         Margin="5"
-                        Click="CancelButton_Click"/>
+                        Click="CancelButton_Click"/>-->
             </Grid>
         </StackPanel>
-        
+
     </Grid>
 </Window>

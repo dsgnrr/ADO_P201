@@ -72,7 +72,7 @@ namespace ADO_P201
                 SaveButtonState = false;
                 SaveButton.Background = Brushes.Gray;
                 SaveButton.Foreground = Brushes.Black;
-                ErrorText.Text = "*Value matches the input";
+                ErrorText.Text = "*The text field contains the original value";
                 inputWasChaged = false;
             }
             else

@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ADO_P201"
         mc:Ignorable="d"
-        Title="StartWindow" Height="450" Width="400">
+        Title="StartWindow" Height="450" Width="400"
+        WindowStartupLocation="CenterScreen">
     <StackPanel Orientation="Vertical">
         <TextBlock Text="ADO.NET"
                    FontSize="24"

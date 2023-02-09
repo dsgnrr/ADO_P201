@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         Closed="Window_Closed"
-        Title="MainWindow" Height="450" Width="900">
+        Title="MainWindow" Height="450" Width="900"
+        WindowStartupLocation="CenterScreen">
     <Grid ShowGridLines="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
