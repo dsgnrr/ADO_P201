@@ -160,7 +160,7 @@ namespace ADO_P201
                         {
                             string command =
                                 "DELETE FROM Departments " +
-                                "WHERE Id = '{department.Id}'; ";
+                                 $"WHERE Id = '{department.Id}'; ";
                             ExecuteCommand(command, $"Delete: {department.Name}");
                         }
                         else // Update
