@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -119,6 +121,38 @@ namespace ADO_P201
             }
         }
 
+        private void ExecuteCommand(string command,string commandName)
+        {
+            SqlCommand cmd = new();
+            cmd.Connection = _connection;
+            cmd.CommandText = command;
+            try//виконання команди
+            {
+                cmd.ExecuteNonQuery(); // NonQuery - без повернення результату
+                MessageBox.Show(
+                    commandName+" successfully complete",
+                    commandName,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            cmd.Dispose();
+        }
+
+        public static SqlDbType GetDBType(Type theType)
+        {
+            SqlParameter p1 = new SqlParameter();
+            TypeConverter tc = TypeDescriptor.GetConverter(p1.DbType);
+
+            p1.DbType = (DbType)tc.ConvertFrom(theType.Name);
+
+            return p1.SqlDbType;
+        }
+
+        #region DOUBLE_CLICKS
         private void DepartmentsItems_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             // робота з бд через ORM зведена до роботи з колекцією
@@ -131,14 +165,22 @@ namespace ADO_P201
                     _dialogDepartment.Department = department;
                     if (_dialogDepartment.ShowDialog() == true) 
                     {
-                        //do_smth();
                         if(_dialogDepartment.Department is null) //Delete
                         {
-                            MessageBox.Show("Deleted");
+                            string command =
+                                "DELETE FROM Departments " +
+                                "WHERE Id = '{department.Id}'; ";
+                            ExecuteCommand(command, $"Delete: {department.Name}");
                         }
                         else // Update
                         {
-                            MessageBox.Show(department.ToString());
+                            //MessageBox.Show(department.ToString());
+                            var departmentName = GetDBType(department.Name.GetType());
+                            string command =
+                                "UPDATE Departments " +
+                                $"SET Name = '{departmentName}' "+
+                                $"WHERE Id='{department.Id}';";
+                            ExecuteCommand(command, "Update Department Name");
                         }
                     }
                 }
@@ -166,5 +208,6 @@ namespace ADO_P201
                 }
             }
         }
+        #endregion
     }
 }

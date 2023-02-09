@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="DepartmentCrudWindow" Height="200" Width="400"
         Loaded="Window_Loaded"
+        Closed="Window_Closed"
         Background="#1f1f1f">
     <Grid>
         <Grid.RowDefinitions>
@@ -69,8 +70,18 @@
                     Margin="5"
                     Grid.Column="1"/>
             </Grid>
+            <!--ErrorMessage-->
+            <TextBlock
+                x:Name="ErrorText"
+                Visibility="Hidden"
+                TextAlignment="Left"
+                FontSize="13"
+                Margin="5"
+                Foreground="DarkRed"
+                Text="*Test Error"
+                FontWeight="DemiBold"/>
             <!--BUTTONS-->
-            <Grid Margin="20">
+            <Grid Margin="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
@@ -80,6 +91,8 @@
                     x:Name="SaveButton"
                     Content="Save"
                         Background="DarkGreen"
+                        MouseEnter="SaveButton_MouseEnter"
+                        MouseLeave="SaveButton_MouseLeave"
                         Foreground="White"
                         FontSize="15"
                         BorderThickness="0"
