@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:ADO_P201"
         mc:Ignorable="d"
         Title="DepartmentCrudWindow" Height="200" Width="400"
+        Loaded="Window_Loaded"
         Background="#1f1f1f">
     <Grid>
         <Grid.RowDefinitions>
@@ -35,7 +36,8 @@
                     Margin="5"
                     Grid.Column="0"/>
                 <TextBox
-                    x:Name="DepartmentId"
+                    x:Name="IdView"
+                    IsEnabled="false"
                     Background="#696969"
                     BorderThickness="0"
                     Foreground="White"
@@ -58,7 +60,7 @@
                     TextAlignment="Left"
                     Margin="5"/>
                 <TextBox
-                    x:Name="DepartmentName"
+                    x:Name="NameView"
                     Background="#696969"
                     BorderThickness="0"
                     Foreground="White"
@@ -74,27 +76,36 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Button Content="Save"
+                <Button
+                    x:Name="SaveButton"
+                    Content="Save"
                         Background="DarkGreen"
                         Foreground="White"
                         FontSize="15"
                         BorderThickness="0"
                         Grid.Column="0"
-                        Margin="5"/>
+                        Margin="5"
+                        Click="SaveButton_Click"/>
+                
                 <Button Content="Delete"
+                        x:Name="DeleteButton"
                         Background="Orange"
                         Foreground="White"
                         FontSize="15"
                         BorderThickness="0"
                         Grid.Column="1"
-                        Margin="5"/>
+                        Margin="5"
+                        Click="DeleteButton_Click"/>
+                
                 <Button Content="Cancel"
+                        x:Name="CancelButton"
                         Background="DarkRed"
                         FontSize="15"
                         Foreground="White"
                         BorderThickness="0"
                         Grid.Column="2"
-                        Margin="5"/>
+                        Margin="5"
+                        Click="CancelButton_Click"/>
             </Grid>
         </StackPanel>
         

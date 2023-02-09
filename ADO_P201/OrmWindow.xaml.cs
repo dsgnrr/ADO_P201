@@ -127,14 +127,20 @@ namespace ADO_P201
             {
                 if(item.Content is Entity.Department department)
                 {
-                    //MessageBox.Show(department.ToString());
-                    //new DepartmentCrudWindow(department).ShowDialog();
-                    if(_dialogDepartment is null)
-                    {
-                        _dialogDepartment = new();
-                    }
+                    _dialogDepartment = new();
                     _dialogDepartment.Department = department;
-                    _dialogDepartment.ShowDialog();
+                    if (_dialogDepartment.ShowDialog() == true) 
+                    {
+                        //do_smth();
+                        if(_dialogDepartment.Department is null) //Delete
+                        {
+                            MessageBox.Show("Deleted");
+                        }
+                        else // Update
+                        {
+                            MessageBox.Show(department.ToString());
+                        }
+                    }
                 }
             }
         }
