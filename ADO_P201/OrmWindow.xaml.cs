@@ -142,15 +142,6 @@ namespace ADO_P201
             cmd.Dispose();
         }
 
-        public static SqlDbType GetDBType(Type theType)
-        {
-            SqlParameter p1 = new SqlParameter();
-            TypeConverter tc = TypeDescriptor.GetConverter(p1.DbType);
-
-            p1.DbType = (DbType)tc.ConvertFrom(theType.Name);
-
-            return p1.SqlDbType;
-        }
 
         #region DOUBLE_CLICKS
         private void DepartmentsItems_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -174,11 +165,10 @@ namespace ADO_P201
                         }
                         else // Update
                         {
-                            //MessageBox.Show(department.ToString());
-                            var departmentName = GetDBType(department.Name.GetType());
+                            //MessageBox.Show(department.ToString());                            
                             string command =
                                 "UPDATE Departments " +
-                                $"SET Name = '{departmentName}' "+
+                                $"SET Name = N'{department.Name}' "+
                                 $"WHERE Id='{department.Id}';";
                             ExecuteCommand(command, "Update Department Name");
                         }
