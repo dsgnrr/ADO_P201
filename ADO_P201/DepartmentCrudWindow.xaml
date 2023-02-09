@@ -1,0 +1,102 @@
+﻿<Window x:Class="ADO_P201.DepartmentCrudWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ADO_P201"
+        mc:Ignorable="d"
+        Title="DepartmentCrudWindow" Height="200" Width="400"
+        Background="#1f1f1f">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.3*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock
+            TextAlignment="Center"
+            FontSize="20"
+            Margin="5"
+            Foreground="White"
+            Text="EDIT DEPARTMENTS"
+            FontWeight="Bold"/>
+        <StackPanel Orientation="Vertical" Grid.Row="1">
+            <!--ID-->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    Text="Id:"
+                    Foreground="White"
+                    FontSize="15"
+                    FontWeight="DemiBold"
+                    TextAlignment="Left"
+                    Margin="5"
+                    Grid.Column="0"/>
+                <TextBox
+                    x:Name="DepartmentId"
+                    Background="#696969"
+                    BorderThickness="0"
+                    Foreground="White"
+                    FontSize="15"
+                    FontWeight="DemiBold"
+                    Margin="5"
+                    Grid.Column="1"/>
+            </Grid>
+            <!--NAME-->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    Text="Name:"
+                    Foreground="White"
+                    FontSize="15"
+                    FontWeight="DemiBold"
+                    TextAlignment="Left"
+                    Margin="5"/>
+                <TextBox
+                    x:Name="DepartmentName"
+                    Background="#696969"
+                    BorderThickness="0"
+                    Foreground="White"
+                    FontSize="15"
+                    FontWeight="DemiBold"
+                    Margin="5"
+                    Grid.Column="1"/>
+            </Grid>
+            <!--BUTTONS-->
+            <Grid Margin="20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Content="Save"
+                        Background="DarkGreen"
+                        Foreground="White"
+                        FontSize="15"
+                        BorderThickness="0"
+                        Grid.Column="0"
+                        Margin="5"/>
+                <Button Content="Delete"
+                        Background="Orange"
+                        Foreground="White"
+                        FontSize="15"
+                        BorderThickness="0"
+                        Grid.Column="1"
+                        Margin="5"/>
+                <Button Content="Cancel"
+                        Background="DarkRed"
+                        FontSize="15"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Grid.Column="2"
+                        Margin="5"/>
+            </Grid>
+        </StackPanel>
+        
+    </Grid>
+</Window>

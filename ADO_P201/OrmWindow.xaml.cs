@@ -21,15 +21,24 @@ namespace ADO_P201
     {
         public ObservableCollection<Entity.Department> Departments { get; set; } 
         public ObservableCollection<Entity.Product> Products { get; set; }
+        public ObservableCollection<Entity.Manager> Managers { get; set; }
+
         private SqlConnection _connection;
+        private DepartmentCrudWindow _dialogDepartment;
 
         public OrmWindow()
         {
             InitializeComponent();
-            Departments = new();
-            Products = new();
+
+            Departments = new ObservableCollection<Entity.Department>();
+            Products = new ObservableCollection<Entity.Product>();
+            Managers = new ObservableCollection<Entity.Manager>();
+
             DataContext = this;
+
             _connection = new(App.ConnectionString);
+
+            _dialogDepartment = null;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -72,7 +81,32 @@ namespace ADO_P201
                 reader.Close();
                 #endregion
 
-                //cmd.Dispose();
+                #region Load Managers
+                cmd.CommandText = "SELECT M.Id, M.Surname, M.Name, M.Secname, M.Id_main_dep, M.Id_sec_dep, M.Id_chief  FROM Managers M";
+
+                reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Managers.Add(new Entity.Manager
+                    {
+                        Id = reader.GetGuid(0),
+                        Surname = reader.GetString(1),
+                        Name = reader.GetString(2),
+                        Secname = reader.GetString(3),
+                        IdMainDep = reader.GetGuid(4),
+                        IdSecDep = reader.GetValue(5) == DBNull.Value
+                            ? null
+                            : reader.GetGuid(5),
+                        IdChief = reader.IsDBNull(6)
+                            ? null
+                            : reader.GetGuid(6)
+
+                    });
+                }
+                reader.Close();
+                #endregion
+
+                cmd.Dispose();
             }
             catch (SqlException ex)
             {
@@ -85,7 +119,7 @@ namespace ADO_P201
             }
         }
 
-        private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void DepartmentsItems_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             // робота з бд через ORM зведена до роботи з колекцією
             // sender - item, що містить посилання на Entity.Department у колекції Departments
@@ -93,12 +127,19 @@ namespace ADO_P201
             {
                 if(item.Content is Entity.Department department)
                 {
-                    MessageBox.Show(department.ToString());
+                    //MessageBox.Show(department.ToString());
+                    //new DepartmentCrudWindow(department).ShowDialog();
+                    if(_dialogDepartment is null)
+                    {
+                        _dialogDepartment = new();
+                    }
+                    _dialogDepartment.Department = department;
+                    _dialogDepartment.ShowDialog();
                 }
             }
         }
 
-        private void ListViewItem_MouseDoubleClick_1(object sender, MouseButtonEventArgs e)
+        private void ProductsItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (sender is ListViewItem item)
             {
@@ -108,12 +149,16 @@ namespace ADO_P201
                 }
             }
         }
-        /* D.z. Реалізувати ORM для таблиці Products
-* утворити сутність
-* оголосити колекцію
-* заповнити колекцію
-* реалізувати її відображення
-* реалізувати "зворотній зв'язок" - передача даних з View до програми
-*/
+
+        private void ManagersItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is ListViewItem item)
+            {
+                if (item.Content is Entity.Manager manager)
+                {
+                    MessageBox.Show(manager.ToString());
+                }
+            }
+        }
     }
 }

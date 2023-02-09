@@ -1,0 +1,6 @@
+завдання:
+створити вікно-шаблон DepartmentCrudWindow
+	Корегуємо відділи
+	Id: 
+	Name: IT відділ <редагується>
+	[Save] [Delete] [Cancel]
