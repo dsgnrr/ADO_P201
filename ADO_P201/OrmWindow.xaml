@@ -20,7 +20,10 @@
                     Grid.Row="0" Grid.Column="0">
             <Label Content="Відділи" HorizontalAlignment="Center"
                    FontSize="22" FontWeight="DemiBold"/>
-            <ListView ItemsSource="{Binding Departments}">
+            <ListView ItemsSource="{Binding Departments}" 
+                      ScrollViewer.VerticalScrollBarVisibility="Visible"
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                      MaxHeight="140">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn
@@ -39,6 +42,11 @@
                     </Style>
                 </ListView.Resources>
             </ListView>
+            <Button
+                x:Name="newDepartmentButton"
+                Content="Новий відділ"
+                Margin="5"
+                Click="newDepartmentButton_Click"/>
         </StackPanel>
         <StackPanel Orientation="Vertical"
                     Grid.Row="0" Grid.Column="1">

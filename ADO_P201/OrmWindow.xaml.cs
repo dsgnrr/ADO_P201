@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -45,81 +46,13 @@ namespace ADO_P201
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                _connection.Open();
-                SqlCommand cmd = new() { Connection = _connection };
-
-                #region Load Departments
-
-                cmd.CommandText = "SELECT D.Id, D.Name FROM Departments D";
-
-                var reader = cmd.ExecuteReader();
-                while(reader.Read())
-                {
-                    Departments.Add(new Entity.Department
-                    {
-                        Id = reader.GetGuid(0),
-                        Name = reader.GetString(1)
-                    });
-                }
-                reader.Close();
-
-                #endregion
-
-                #region Load Products
-                cmd.CommandText = "SELECT P.Id, P.Name, P.Price FROM Products P";
-
-                reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    Products.Add(new Entity.Product
-                    {
-                        Id = reader.GetGuid(0),
-                        Name = reader.GetString(1),
-                        Price = reader.GetDouble(2)
-                    });
-                }
-                reader.Close();
-                #endregion
-
-                #region Load Managers
-                cmd.CommandText = "SELECT M.Id, M.Surname, M.Name, M.Secname, M.Id_main_dep, M.Id_sec_dep, M.Id_chief  FROM Managers M";
-
-                reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    Managers.Add(new Entity.Manager
-                    {
-                        Id = reader.GetGuid(0),
-                        Surname = reader.GetString(1),
-                        Name = reader.GetString(2),
-                        Secname = reader.GetString(3),
-                        IdMainDep = reader.GetGuid(4),
-                        IdSecDep = reader.GetValue(5) == DBNull.Value
-                            ? null
-                            : reader.GetGuid(5),
-                        IdChief = reader.IsDBNull(6)
-                            ? null
-                            : reader.GetGuid(6)
-
-                    });
-                }
-                reader.Close();
-                #endregion
-
-                cmd.Dispose();
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show(
-                    ex.Message,
-                    "Window will be closed",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-                this.Close();
-            }
+            _connection.Open();
+            LoadDepartments();
+            LoadManagers();
+            LoadProducts();    
         }
+
+        #region SQL_COMMANDS
 
         private void ExecuteCommand(string command,string commandName)
         {
@@ -141,7 +74,108 @@ namespace ADO_P201
             }
             cmd.Dispose();
         }
+        private void LoadDepartments()
+        {
+            SqlCommand cmd = new() { Connection = _connection };
+            try
+            {
+                cmd.CommandText = "SELECT D.Id, D.Name FROM Departments D";
 
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Departments.Add(new Entity.Department
+                    {
+                        Id = reader.GetGuid(0),
+                        Name = reader.GetString(1)
+                    });
+                }
+                reader.Close();
+                cmd.Dispose();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Window will be closed",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                this.Close();
+            }
+        }
+
+        private void LoadProducts()
+        {
+            SqlCommand cmd = new() { Connection = _connection };
+            try
+            {
+                cmd.CommandText = "SELECT P.Id, P.Name, P.Price FROM Products P";
+
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Products.Add(new Entity.Product
+                    {
+                        Id = reader.GetGuid(0),
+                        Name = reader.GetString(1),
+                        Price = reader.GetDouble(2)
+                    });
+                }
+                reader.Close();
+                cmd.Dispose();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Window will be closed",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                this.Close();
+            }
+        }
+
+        private void LoadManagers()
+        {
+            SqlCommand cmd = new() { Connection = _connection };
+            try
+            {
+                cmd.CommandText = "SELECT M.Id, M.Surname, M.Name, M.Secname, M.Id_main_dep, M.Id_sec_dep, M.Id_chief  FROM Managers M";
+
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Managers.Add(new Entity.Manager
+                    {
+                        Id = reader.GetGuid(0),
+                        Surname = reader.GetString(1),
+                        Name = reader.GetString(2),
+                        Secname = reader.GetString(3),
+                        IdMainDep = reader.GetGuid(4),
+                        IdSecDep = reader.GetValue(5) == DBNull.Value
+                        ? null
+                            : reader.GetGuid(5),
+                        IdChief = reader.IsDBNull(6)
+                        ? null
+                            : reader.GetGuid(6)
+
+                    });
+                }
+                reader.Close();
+                cmd.Dispose();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Window will be closed",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                this.Close();
+            }
+        }
+
+        #endregion
 
         #region DOUBLE_CLICKS
         private void DepartmentsItems_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -171,6 +205,8 @@ namespace ADO_P201
                                 $"SET Name = N'{department.Name}' "+
                                 $"WHERE Id='{department.Id}';";
                             ExecuteCommand(command, "Update Department Name");
+                            Departments.Clear();
+                            LoadDepartments();
                         }
                     }
                 }
@@ -199,5 +235,10 @@ namespace ADO_P201
             }
         }
         #endregion
+
+        private void newDepartmentButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
