@@ -27,7 +27,11 @@ namespace ADO_P201
         public ObservableCollection<Entity.Manager> Managers { get; set; }
 
         private SqlConnection _connection;
+        
         private DepartmentCrudWindow _dialogDepartment;
+
+        //Посилання на вікно в якому створюється відділ
+        private NewDepartmentWindow _newDepartmentWindow;
 
         public OrmWindow()
         {
@@ -141,7 +145,6 @@ namespace ADO_P201
             try
             {
                 cmd.CommandText = "SELECT M.Id, M.Surname, M.Name, M.Secname, M.Id_main_dep, M.Id_sec_dep, M.Id_chief  FROM Managers M";
-
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
@@ -196,6 +199,8 @@ namespace ADO_P201
                                 "DELETE FROM Departments " +
                                  $"WHERE Id = '{department.Id}'; ";
                             ExecuteCommand(command, $"Delete: {department.Name}");
+                            Departments.Clear();
+                            LoadDepartments();
                         }
                         else // Update
                         {
@@ -236,9 +241,25 @@ namespace ADO_P201
         }
         #endregion
 
+        //СТВОРЕННЯ НОВОГО ВІДДІЛУ
         private void newDepartmentButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Entity.Department department = new();
+            _newDepartmentWindow = new NewDepartmentWindow();
+            _newDepartmentWindow.Department = department;
+            if(_newDepartmentWindow.ShowDialog()==true)
+            {
+                if(department!=null)
+                {
+                    string command = @"INSERT INTO Departments 
+	                (Id, Name)
+                    VALUES" +
+                    $"(N'{department.Id}', N'{department.Name}')";
+                    ExecuteCommand(command, "Create new Department");
+                    Departments.Clear();
+                    LoadDepartments();
+                }
+            }
         }
     }
 }

@@ -23,7 +23,7 @@
                    FontSize="22" FontWeight="DemiBold"/>
             <ListView ItemsSource="{Binding Departments}" 
                       ScrollViewer.VerticalScrollBarVisibility="Visible"
-                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                       MaxHeight="140">
                 <ListView.View>
                     <GridView>

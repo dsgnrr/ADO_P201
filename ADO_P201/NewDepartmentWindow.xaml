@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:ADO_P201"
         mc:Ignorable="d"
         Title="NewDepartmentWindow" Height="200" Width="400" Background="#1f1f1f"
-        WindowStartupLocation="CenterScreen">
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Closed="Window_Closed">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.3*"/>
@@ -23,8 +25,9 @@
             <!--ID-->
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.25*"/>
                     <ColumnDefinition/>
+                    <ColumnDefinition Width="0.5*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock
                     Text="Id:"
@@ -44,12 +47,30 @@
                     FontWeight="DemiBold"
                     Margin="5"
                     Grid.Column="1"/>
+                <Button
+                    x:Name="generateIdButton"
+                    Grid.Column="2"
+                    Margin="5"
+                    BorderThickness="0"
+                    Background="BlueViolet"
+                    Foreground="White"
+                    Click="generateIdButton_Click">
+                    <Button.Content>
+                        <TextBlock
+                            Text="Generate ID"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap"
+                            FontWeight="DemiBold"
+                            FontSize="13"/>
+                    </Button.Content>
+                </Button>
             </Grid>
             <!--NAME-->
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.25*"/>
                     <ColumnDefinition/>
+                    <ColumnDefinition Width="0.5*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock
                     Text="Name:"
@@ -66,7 +87,8 @@
                     FontSize="15"
                     FontWeight="DemiBold"
                     Margin="5"
-                    Grid.Column="1"/>
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2"/>
             </Grid>
             <!--ErrorMessage-->
             <TextBlock
@@ -83,9 +105,8 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
-                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <!--<Button
+                <Button
                     x:Name="SaveButton"
                     Content="Save"
                         Background="DarkGreen"
@@ -94,17 +115,10 @@
                         BorderThickness="0"
                         Grid.Column="0"
                         Margin="5"
-                        Click="SaveButton_Click"/>
-
-                <Button Content="Delete"
-                        x:Name="DeleteButton"
-                        Background="Orange"
-                        Foreground="White"
-                        FontSize="15"
-                        BorderThickness="0"
-                        Grid.Column="1"
-                        Margin="5"
-                        Click="DeleteButton_Click"/>
+                        Click="SaveButton_Click"
+                        MouseEnter="SaveButton_MouseEnter"
+                        MouseLeave="SaveButton_MouseLeave"/>
+                        
 
                 <Button Content="Cancel"
                         x:Name="CancelButton"
@@ -114,7 +128,7 @@
                         BorderThickness="0"
                         Grid.Column="2"
                         Margin="5"
-                        Click="CancelButton_Click"/>-->
+                        Click="CancelButton_Click"/>
             </Grid>
         </StackPanel>
 
