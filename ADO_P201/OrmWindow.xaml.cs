@@ -220,8 +220,10 @@ namespace ADO_P201
                         {
                             string command =
                                 "DELETE FROM Departments " +
-                                 $"WHERE Id = '{department.Id}'; ";
-                            ExecuteCommand(command, $"Delete: {department.Name}");
+                                 $"WHERE Id = @id; ";
+                            using SqlCommand cmd = new(command, _connection);
+                            cmd.Parameters.AddWithValue("@id", department.Id);
+                            ExecuteCommand(cmd, $"Delete: {department.Name}");
                             Departments.Clear();
                             LoadDepartments();
                         }
@@ -230,9 +232,12 @@ namespace ADO_P201
                             //MessageBox.Show(department.ToString());                            
                             string command =
                                 "UPDATE Departments " +
-                                $"SET Name = N'{department.Name}' "+
-                                $"WHERE Id='{department.Id}';";
-                            ExecuteCommand(command, "Update Department Name");
+                                $"SET Name = @name "+
+                                $"WHERE Id=@id;";
+                            using SqlCommand cmd = new(command, _connection);
+                            cmd.Parameters.AddWithValue("@id", department.Id);
+                            cmd.Parameters.AddWithValue("@name", department.Name);
+                            ExecuteCommand(cmd,"Update Department Name");
                             Departments.Clear();
                             LoadDepartments();
                         }
@@ -304,8 +309,11 @@ namespace ADO_P201
                     string command = @"INSERT INTO Departments 
 	                (Id, Name)
                     VALUES" +
-                    $"(N'{department.Id}', N'{department.Name}')";
-                    ExecuteCommand(command, "Create new Department");
+                    $"(@id, @name)";
+                    using SqlCommand cmd = new(command, _connection);
+                    cmd.Parameters.AddWithValue("@id", department.Id);
+                    cmd.Parameters.AddWithValue("@name", department.Name);
+                    ExecuteCommand(cmd, "Create new Department");
                     Departments.Clear();
                     LoadDepartments();
                 }

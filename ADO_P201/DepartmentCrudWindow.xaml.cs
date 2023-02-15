@@ -64,6 +64,7 @@ namespace ADO_P201
         }
         #endregion
 
+        //ПЕРЕВІРКА НА ВВЕДЕННЯ ДАНИХ
         #region CONDITIONS
         private void CheckNameField(object sender, EventArgs args)
         {
