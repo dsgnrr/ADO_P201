@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ADO_P201.Entity;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -29,6 +30,8 @@ namespace ADO_P201
         private SqlConnection _connection;
         
         private DepartmentCrudWindow _dialogDepartment;
+
+        private ProductCrudWindow _dialogProduct;
 
         //Посилання на вікно в якому створюється відділ
         private NewDepartmentWindow _newDepartmentWindow;
@@ -224,7 +227,32 @@ namespace ADO_P201
             {
                 if (item.Content is Entity.Product product)
                 {
-                    MessageBox.Show(product.ToString());
+                    //MessageBox.Show(product.ToString());
+                    _dialogProduct = new();
+                    _dialogProduct.Product = product;
+                    if (_dialogProduct.ShowDialog() == true)
+                    {
+                        if (_dialogProduct.Product is null) //Delete
+                        {
+                            //string command =
+                            //    "DELETE FROM Departments " +
+                            //     $"WHERE Id = '{department.Id}'; ";
+                            //ExecuteCommand(command, $"Delete: {department.Name}");
+                            //Departments.Clear();
+                            //LoadDepartments();
+                        }
+                        else // Update
+                        {
+                            MessageBox.Show(product.ToString());
+                            //string command =
+                            //    "UPDATE Departments " +
+                            //    $"SET Name = N'{department.Name}' " +
+                            //    $"WHERE Id='{department.Id}';";
+                            //ExecuteCommand(command, "Update Department Name");
+                            //Departments.Clear();
+                            //LoadDepartments();
+                        }
+                    }
                 }
             }
         }
@@ -258,6 +286,23 @@ namespace ADO_P201
                     ExecuteCommand(command, "Create new Department");
                     Departments.Clear();
                     LoadDepartments();
+                }
+            }
+        }
+
+        private void AddProductButton_Click(object sender, RoutedEventArgs e)
+        {
+            ProductCrudWindow dialog = new();
+            if(dialog.ShowDialog()==true)
+            {
+                if(dialog.Product is not null)
+                {
+                    String sql = $"INSERT INTO Products(Id, Name, Price)" +
+                        $" VALUES('{dialog.Product.Id}', N'{dialog.Product.Name}', {dialog.Product.Price})";
+                    ExecuteCommand(sql, "Add new Product");
+                    Products.Clear();
+                    LoadProducts();
+                    //MessageBox.Show(dialog.Product.ToString());
                 }
             }
         }
