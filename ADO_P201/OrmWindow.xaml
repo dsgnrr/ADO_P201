@@ -51,15 +51,14 @@
         </StackPanel>
         <StackPanel Orientation="Vertical"
                     Grid.Row="0" Grid.Column="1">
-            <StackPanel Orientation="Horizontal">
-                <Label Content="Товари" HorizontalAlignment="Center"
-                   FontSize="22" FontWeight="DemiBold" Margin="5"/>
-                <Button Content="New product" Margin="5" 
-                        Click="AddProductButton_Click"
-                        x:Name="AddProductButton"/>
-            </StackPanel>
-            
-            <ListView ItemsSource="{Binding Products}">
+            <Label Content="Товари" HorizontalAlignment="Center"
+                   FontSize="22" FontWeight="DemiBold"/>
+           
+
+            <ListView ItemsSource="{Binding Products}"
+                      ScrollViewer.VerticalScrollBarVisibility="Visible"
+                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                      MaxHeight="140">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn
@@ -81,6 +80,9 @@
                     </Style>
                 </ListView.Resources>
             </ListView>
+            <Button Content="New product" Margin="5" 
+                        Click="AddProductButton_Click"
+                        x:Name="AddProductButton"/>
         </StackPanel>
 
         <StackPanel Orientation="Vertical"

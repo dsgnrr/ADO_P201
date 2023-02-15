@@ -1,6 +1,7 @@
 ﻿using ADO_P201.Entity;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -127,20 +128,31 @@ namespace ADO_P201
                 ErrorText.Visibility = Visibility.Hidden;
             }
         }
-
+        //2ПАРА
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             if (SaveButtonState)
             {
                 Product.Name = NameView.Text;
-                Product.Price = double.Parse(PriceView.Text);
+                try
+                {
+                    Product.Price = double.Parse(
+                        PriceView.Text.Replace(',','.'),
+                        CultureInfo.InvariantCulture);
+                }
+                catch
+                {
+                    MessageBox.Show("Неправильний формат числа для ціни");
+                    return;
+                }
                 this.DialogResult = true;
             }
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Product = null;
+            this.DialogResult = false;
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)

@@ -30,9 +30,8 @@ namespace ADO_P201
         private SqlConnection _connection;
         
         private DepartmentCrudWindow _dialogDepartment;
-
         private ProductCrudWindow _dialogProduct;
-
+        
         //Посилання на вікно в якому створюється відділ
         private NewDepartmentWindow _newDepartmentWindow;
 
@@ -80,7 +79,28 @@ namespace ADO_P201
                 MessageBox.Show(ex.Message);
             }
             cmd.Dispose();
+        } 
+        private void ExecuteCommand(SqlCommand command,string commandName)
+        {
+            try//виконання команди
+            {
+                command.ExecuteNonQuery(); // NonQuery - без повернення результату
+                MessageBox.Show(
+                    commandName+" successfully complete",
+                    commandName,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            command.Dispose();
         }
+
+        #endregion
+
+        #region LOAD_DATA
         private void LoadDepartments()
         {
             SqlCommand cmd = new() { Connection = _connection };
@@ -269,6 +289,8 @@ namespace ADO_P201
         }
         #endregion
 
+        #region CREATE_NEW_ROWS_DB
+
         //СТВОРЕННЯ НОВОГО ВІДДІЛУ
         private void newDepartmentButton_Click(object sender, RoutedEventArgs e)
         {
@@ -297,14 +319,26 @@ namespace ADO_P201
             {
                 if(dialog.Product is not null)
                 {
-                    String sql = $"INSERT INTO Products(Id, Name, Price)" +
-                        $" VALUES('{dialog.Product.Id}', N'{dialog.Product.Name}', {dialog.Product.Price})";
-                    ExecuteCommand(sql, "Add new Product");
+                    //НЕ РЕКОМЕНДУЄТЬСЯ див. у конспект
+                    //String sql = $"INSERT INTO Products(Id, Name, Price)" +
+                    //    $" VALUES('{dialog.Product.Id}', N'{dialog.Product.Name}', {dialog.Product.Price})";
+                    //ExecuteCommand(sql, "Add new Product");
+                    //Products.Clear();
+                    //LoadProducts();
+                    //MessageBox.Show(dialog.Product.ToString());
+
+                    String sql = "INSERT INTO Products(Id, Name, Price)" +
+                     " VALUES(@id, @name, @price)";
+                    using SqlCommand cmd = new(sql, _connection);
+                    cmd.Parameters.AddWithValue("@id", dialog.Product.Id);
+                    cmd.Parameters.AddWithValue("@name", dialog.Product.Name);
+                    cmd.Parameters.AddWithValue("@price", dialog.Product.Price);
+                    ExecuteCommand(cmd, "Add new Product");
                     Products.Clear();
                     LoadProducts();
-                    //MessageBox.Show(dialog.Product.ToString());
                 }
             }
         }
+        #endregion
     }
 }
