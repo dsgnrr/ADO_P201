@@ -1,4 +1,5 @@
-﻿using ADO_P201.Entity;
+﻿using ADO_P201.CRUDWindows;
+using ADO_P201.Entity;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -31,9 +32,7 @@ namespace ADO_P201
         
         private DepartmentCrudWindow _dialogDepartment;
         private ProductCrudWindow _dialogProduct;
-        
-        //Посилання на вікно в якому створюється відділ
-        private NewDepartmentWindow _newDepartmentWindow;
+
 
         public OrmWindow()
         {
@@ -101,6 +100,7 @@ namespace ADO_P201
         #endregion
 
         #region LOAD_DATA
+        //ЗАВАНТАЖИТИ ВІДДІЛИ
         private void LoadDepartments()
         {
             SqlCommand cmd = new() { Connection = _connection };
@@ -130,23 +130,18 @@ namespace ADO_P201
                 this.Close();
             }
         }
-
+        //ЗАВАНТАЖИТИ ТОВАРИ
         private void LoadProducts()
         {
             SqlCommand cmd = new() { Connection = _connection };
             try
             {
-                cmd.CommandText = "SELECT P.Id, P.Name, P.Price FROM Products P";
+                cmd.CommandText = "SELECT P.Id, P.* FROM Products P WHERE P.DeleteDt IS NULL";
 
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    Products.Add(new Entity.Product
-                    {
-                        Id = reader.GetGuid(0),
-                        Name = reader.GetString(1),
-                        Price = reader.GetDouble(2)
-                    });
+                    Products.Add(new Entity.Product(reader)) ;
                 }
                 reader.Close();
                 cmd.Dispose();
@@ -162,6 +157,7 @@ namespace ADO_P201
             }
         }
 
+        //ЗАВАНТАЖИТИ КЕРІВНИКІВ
         private void LoadManagers()
         {
             SqlCommand cmd = new() { Connection = _connection };
@@ -268,14 +264,18 @@ namespace ADO_P201
                         }
                         else // Update
                         {
-                            MessageBox.Show(product.ToString());
-                            //string command =
-                            //    "UPDATE Departments " +
-                            //    $"SET Name = N'{department.Name}' " +
-                            //    $"WHERE Id='{department.Id}';";
-                            //ExecuteCommand(command, "Update Department Name");
-                            //Departments.Clear();
-                            //LoadDepartments();
+                            //MessageBox.Show(product.ToString());
+                            string command =
+                                "UPDATE Products " +
+                                $"SET Name = @name, Price = @price " +
+                                $"WHERE Id=@id;";
+                            using SqlCommand cmd = new(command, _connection);
+                            cmd.Parameters.AddWithValue("@id", product.Id);
+                            cmd.Parameters.AddWithValue("@name", product.Name);
+                            cmd.Parameters.AddWithValue("@price", product.Price);
+                            ExecuteCommand(cmd, "Update Department Name");
+                            Products.Clear();
+                            LoadProducts();
                         }
                     }
                 }
@@ -288,7 +288,9 @@ namespace ADO_P201
             {
                 if (item.Content is Entity.Manager manager)
                 {
-                    MessageBox.Show(manager.ToString());
+                    ManagerCrudWindow dialog = new() { Owner = this };
+                    dialog.ShowDialog();
+
                 }
             }
         }
@@ -297,23 +299,19 @@ namespace ADO_P201
         #region CREATE_NEW_ROWS_DB
 
         //СТВОРЕННЯ НОВОГО ВІДДІЛУ
-        private void newDepartmentButton_Click(object sender, RoutedEventArgs e)
+        private void AddDepartmentButton_Click(object sender, RoutedEventArgs e)
         {
-            Entity.Department department = new();
-            _newDepartmentWindow = new NewDepartmentWindow();
-            _newDepartmentWindow.Department = department;
-            if(_newDepartmentWindow.ShowDialog()==true)
+            DepartmentCrudWindow dialog = new();
+            if(dialog.ShowDialog()==true)
             {
-                if(department!=null)
+                if(dialog.Department is not null)
                 {
-                    string command = @"INSERT INTO Departments 
-	                (Id, Name)
-                    VALUES" +
-                    $"(@id, @name)";
-                    using SqlCommand cmd = new(command, _connection);
-                    cmd.Parameters.AddWithValue("@id", department.Id);
-                    cmd.Parameters.AddWithValue("@name", department.Name);
-                    ExecuteCommand(cmd, "Create new Department");
+                    String sql = "INSERT INTO Departments(Id, Name)" +
+                     " VALUES(@id, @name)";
+                    using SqlCommand cmd = new(sql, _connection);
+                    cmd.Parameters.AddWithValue("@id", dialog.Department.Id);
+                    cmd.Parameters.AddWithValue("@name", dialog.Department.Name);
+                    ExecuteCommand(cmd, "Add new Department");
                     Departments.Clear();
                     LoadDepartments();
                 }
@@ -327,13 +325,15 @@ namespace ADO_P201
             {
                 if(dialog.Product is not null)
                 {
-                    //НЕ РЕКОМЕНДУЄТЬСЯ див. у конспект
-                    //String sql = $"INSERT INTO Products(Id, Name, Price)" +
-                    //    $" VALUES('{dialog.Product.Id}', N'{dialog.Product.Name}', {dialog.Product.Price})";
-                    //ExecuteCommand(sql, "Add new Product");
-                    //Products.Clear();
-                    //LoadProducts();
-                    //MessageBox.Show(dialog.Product.ToString());
+                    /*
+                        НЕ РЕКОМЕНДУЄТЬСЯ див. у конспект
+                        String sql = $"INSERT INTO Products(Id, Name, Price)" +
+                            $" VALUES('{dialog.Product.Id}', N'{dialog.Product.Name}', {dialog.Product.Price})";
+                        ExecuteCommand(sql, "Add new Product");
+                        Products.Clear();
+                        LoadProducts();
+                        MessageBox.Show(dialog.Product.ToString());
+                    */
 
                     String sql = "INSERT INTO Products(Id, Name, Price)" +
                      " VALUES(@id, @name, @price)";

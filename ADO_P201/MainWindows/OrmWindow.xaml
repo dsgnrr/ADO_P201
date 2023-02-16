@@ -44,10 +44,10 @@
                 </ListView.Resources>
             </ListView>
             <Button
-                x:Name="newDepartmentButton"
+                x:Name="AddDepartmentButton"
                 Content="Новий відділ"
                 Margin="5"
-                Click="newDepartmentButton_Click"/>
+                Click="AddDepartmentButton_Click"/>
         </StackPanel>
         <StackPanel Orientation="Vertical"
                     Grid.Row="0" Grid.Column="1">
@@ -70,6 +70,9 @@
                         <GridViewColumn
                             Header="Price"
                             DisplayMemberBinding="{Binding Path=Price}"/>
+                        <GridViewColumn
+                            Header="Del"
+                            DisplayMemberBinding="{Binding Path=DeleteDt}"/>
                     </GridView>
                 </ListView.View>
                 <ListView.Resources>
@@ -80,7 +83,7 @@
                     </Style>
                 </ListView.Resources>
             </ListView>
-            <Button Content="New product" Margin="5" 
+            <Button Content="Новий товар" Margin="5" 
                         Click="AddProductButton_Click"
                         x:Name="AddProductButton"/>
         </StackPanel>

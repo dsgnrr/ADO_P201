@@ -19,7 +19,7 @@ namespace ADO_P201
         //    Integrated Security=True";
         public static readonly String ConnectionString = @"
             Data Source=(LocalDB)\MSSQLLocalDB;
-            AttachDbFilename=C:\Users\dsgnrr\source\repos\ADO_P201\ADO_P201\ADO201.mdf;
+            AttachDbFilename=C:\Users\dsgnrr\source\repos\ADO_P201\ADO_P201\DataBase\ADO201.mdf;
             Integrated Security=True";
     }
 }

@@ -1,8 +1,9 @@
-﻿using System;
+﻿using ADO_P201.Entity;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,22 +17,25 @@ using System.Windows.Threading;
 
 namespace ADO_P201
 {
-    public partial class DepartmentCrudWindow : Window
+    /// <summary>
+    /// Логика взаимодействия для ProductCrudWindow.xaml
+    /// </summary>
+    /// 
+    public partial class ProductCrudWindow : Window
     {
-        //Обмінне поле - передається з викликаючого вікна
-        public Entity.Department Department { get; set; }
+        public Entity.Product Product { get; set; }
 
         private bool SaveButtonState;
         private bool inputWasChaged;
         private bool stringIsEmpty;
         private DispatcherTimer timer;
-        public DepartmentCrudWindow()
+
+        public ProductCrudWindow()
         {
             InitializeComponent();
-            Department = null;
+            Product = null;
             BaseOptions();
         }
-        
         private void BaseOptions()
         {
             SaveButtonState = true;
@@ -44,31 +48,10 @@ namespace ADO_P201
             timer.Start();
         }
 
-        #region WINDOW_EVENTS
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            if(Department is null)  // режим додавання (Create)
-            {
-                DeleteButton.IsEnabled = false;
-            }
-            else // режим редагування чи видалення (Update or Delete)
-            {
-                IdView.Text = Department.Id.ToString();
-                NameView.Text = Department.Name;
-                DeleteButton.IsEnabled = true;
-            }
-        }
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            timer.Stop();
-        }
-        #endregion
-
-        //ПЕРЕВІРКА НА ВВЕДЕННЯ ДАНИХ
         #region CONDITIONS
         private void CheckNameField(object sender, EventArgs args)
         {
-            if(NameView.Text==Department.Name)
+            if (NameView.Text == Product.Name)
             {
                 SaveButtonState = false;
                 SaveButton.Background = Brushes.Gray;
@@ -87,7 +70,7 @@ namespace ADO_P201
                 }
             }
 
-            if (NameView.Text.Trim() == String.Empty)
+            if (NameView.Text.Trim() == String.Empty || PriceView.Text.Trim() == String.Empty) 
             {
                 SaveButtonState = false;
                 SaveButton.Background = Brushes.Gray;
@@ -106,7 +89,35 @@ namespace ADO_P201
                 }
             }
         }
-       
+
+
+        #endregion
+
+        #region WINDOW_EVENTS
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (Product is null)  // режим додавання (Create)
+            {
+                Product = new() { Id = Guid.NewGuid() };
+
+                WindowName.Text = "CREATE PRODUCT";
+                CrudButtons.ColumnDefinitions.RemoveAt(1);
+                CrudButtons.Children.Remove(DeleteButton);
+
+            }
+            else // режим редагування чи видалення (Update or Delete)
+            {
+                
+                NameView.Text = Product.Name;
+                PriceView.Text = Product.Price.ToString();
+                DeleteButton.IsEnabled = true;
+            }
+            IdView.Text = Product.Id.ToString();
+        }
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            timer.Stop();
+        }
 
         #endregion
 
@@ -125,12 +136,23 @@ namespace ADO_P201
                 ErrorText.Visibility = Visibility.Hidden;
             }
         }
-
+        //2ПАРА
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             if (SaveButtonState)
             {
-                Department.Name = NameView.Text;
+                Product.Name = NameView.Text;
+                try
+                {
+                    Product.Price = double.Parse(
+                        PriceView.Text.Replace(',','.'),
+                        CultureInfo.InvariantCulture);
+                }
+                catch
+                {
+                    MessageBox.Show("Неправильний формат числа для ціни");
+                    return;
+                }
                 this.DialogResult = true;
             }
         }
@@ -138,13 +160,13 @@ namespace ADO_P201
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             var result = MessageBox.Show(
-                $"Do you really want to remove: {Department.Name}",
-                "Delete field",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question);
+                 $"Do you really want to remove: {Product.Name}",
+                 "Delete field",
+                 MessageBoxButton.YesNo,
+                 MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
-                Department = null;
+                Product = null;
                 this.DialogResult = true;
             }
         }
@@ -154,10 +176,7 @@ namespace ADO_P201
             this.DialogResult = false; // те що поверне ShowDialog
         }
 
-
         #endregion
-
-
-      
     }
+
 }
