@@ -8,7 +8,7 @@
         Loaded="Window_Loaded"
         Title="OrmWindow" Height="450" Width="800"
         WindowStartupLocation="CenterScreen">
-    <Grid ShowGridLines="True">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -89,7 +89,7 @@
         </StackPanel>
 
         <StackPanel Orientation="Vertical"
-                    Grid.Row="1" Grid.Column="0">
+                    Grid.Row="1" Grid.ColumnSpan="2">
             <Label Content="Менеджери" HorizontalAlignment="Center"
                    FontSize="22" FontWeight="DemiBold"/>
             <ListView ItemsSource="{Binding Managers}" 

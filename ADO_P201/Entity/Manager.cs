@@ -15,5 +15,13 @@ namespace ADO_P201.Entity
         public Guid IdMainDep { get; set; } //Guid - ValueType, вживається для полів з модифікатором NOT NULL
         public Guid? IdSecDep { get; set; } // Якщо NULL не забронений, Guid використовується з Nullable(?)
         public Guid? IdChief { get; set; } //Gguid? - скорочення від Nullable<Guid>
+
+        public Manager()
+        {
+            Id = Guid.NewGuid();
+            Surname = null;
+            Name = null;
+            Secname = null;
+        }
     }
 }

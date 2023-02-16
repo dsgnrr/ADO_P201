@@ -30,8 +30,9 @@
             <!--ID-->
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.3*"/>
+                    <ColumnDefinition Width="0.35*"/>
                     <ColumnDefinition/>
+                    <ColumnDefinition Width="0.3*"/>
                 </Grid.ColumnDefinitions>
 
                 <TextBlock
@@ -52,14 +53,16 @@
                     FontSize="15"
                     FontWeight="DemiBold"
                     Margin="5"
-                    Grid.Column="1"/>
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2"/>
             </Grid>
 
             <!--SURNAME-->
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.3*"/>
+                    <ColumnDefinition Width="0.35*"/>
                     <ColumnDefinition/>
+                    <ColumnDefinition Width="0.3*"/>
                 </Grid.ColumnDefinitions>
 
                 <TextBlock
@@ -78,14 +81,16 @@
                     FontSize="15"
                     FontWeight="DemiBold"
                     Margin="5"
-                    Grid.Column="1"/>
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2"/>
             </Grid>
 
             <!--NameView-->
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.3*"/>
+                    <ColumnDefinition Width="0.35*"/>
                     <ColumnDefinition/>
+                    <ColumnDefinition Width="0.3*"/>
                 </Grid.ColumnDefinitions>
 
                 <TextBlock
@@ -104,15 +109,17 @@
                     FontSize="15"
                     FontWeight="DemiBold"
                     Margin="5"
-                    Grid.Column="1"/>
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2"/>
                 
             </Grid>
             
             <!--SECNAME-->
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.3*"/>
+                    <ColumnDefinition Width="0.35*"/>
                     <ColumnDefinition/>
+                    <ColumnDefinition Width="0.3*"/>
                 </Grid.ColumnDefinitions>
 
                 <TextBlock
@@ -131,14 +138,16 @@
                     FontSize="15"
                     FontWeight="DemiBold"
                     Margin="5"
-                    Grid.Column="1"/>
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2"/>
             </Grid>
 
             <!--MAIN_DEP-->
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.3*"/>
+                    <ColumnDefinition Width="0.35*"/>
                     <ColumnDefinition/>
+                    <ColumnDefinition Width="0.3*"/>
                 </Grid.ColumnDefinitions>
 
                 <TextBlock
@@ -150,7 +159,45 @@
                     Margin="5"/>
 
                 <ComboBox
-                    x:Name="MainDepView"
+                    x:Name="MainDepComboBox"
+                    Background="#696969"
+                    BorderThickness="0"
+                    Foreground="#1f1f1f"
+                    FontSize="15"
+                    FontWeight="DemiBold"
+                    Margin="5"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2"
+                    ItemsSource="{Binding Departments}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Path=Name}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                
+            </Grid>
+
+            <!--SEC_DEP-->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.35*"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="0.3*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    Text="SecDep:"
+                    Foreground="White"
+                    FontSize="15"
+                    FontWeight="DemiBold"
+                    TextAlignment="Left"
+                    Margin="5"/>
+
+                <ComboBox
+                    x:Name="SecDepComboBox"
                     Background="#696969"
                     BorderThickness="0"
                     Foreground="#1f1f1f"
@@ -167,40 +214,23 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                
-            </Grid>
-
-            <!--SEC_DEP-->
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.3*"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-
-                <TextBlock
-                    Text="SecDep:"
-                    Foreground="White"
-                    FontSize="15"
-                    FontWeight="DemiBold"
-                    TextAlignment="Left"
-                    Margin="5"/>
-
-                <TextBox
-                    x:Name="SecDepView"
-                    Background="#696969"
-                    BorderThickness="0"
-                    Foreground="White"
-                    FontSize="15"
-                    FontWeight="DemiBold"
+                <Button
+                    x:Name="ClearSecDepButton"
+                    Grid.Column="2"
                     Margin="5"
-                    Grid.Column="1"/>
+                    BorderThickness="0"
+                    Background="BlueViolet"
+                    Foreground="White"
+                    Content="Clear"
+                    FontWeight="DemiBold"/>
             </Grid>
 
             <!--ID_CHIEF-->
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.3*"/>
+                    <ColumnDefinition Width="0.35*"/>
                     <ColumnDefinition/>
+                    <ColumnDefinition Width="0.3*"/>
                 </Grid.ColumnDefinitions>
 
                 <TextBlock
@@ -211,8 +241,8 @@
                     TextAlignment="Left"
                     Margin="5"/>
 
-                <TextBox
-                    x:Name="ChiefView"
+                <ComboBox
+                    x:Name="ChiefComboBox"
                     Background="#696969"
                     BorderThickness="0"
                     Foreground="White"
@@ -220,6 +250,15 @@
                     FontWeight="DemiBold"
                     Margin="5"
                     Grid.Column="1"/>
+                <Button
+                    x:Name="ClearChiefButton"
+                    Grid.Column="2"
+                    Margin="5"
+                    BorderThickness="0"
+                    Background="BlueViolet"
+                    Foreground="White"
+                    Content="Clear"
+                    FontWeight="DemiBold"/>
             </Grid>
 
             <!--ErrorMessage-->

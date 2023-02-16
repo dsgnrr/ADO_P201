@@ -1,6 +1,7 @@
 ﻿using ADO_P201.Entity;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -21,14 +22,50 @@ namespace ADO_P201.CRUDWindows
     /// </summary>
     public partial class ManagerCrudWindow : Window
     {
+        public Entity.Manager? Manager;
+
+        private ObservableCollection<Entity.Department> OwnerDepartments;
         public ManagerCrudWindow()
         {
             InitializeComponent();
+            Manager = null;
+            OwnerDepartments = null;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            DataContext = Owner;
+            if (Owner is OrmWindow owner)
+            {
+                DataContext = Owner;
+                OwnerDepartments = owner.Departments;
+            }
+            else
+            {
+                MessageBox.Show("Owner is not OrmWindow");
+                Close();
+            }
+
+            if(this.Manager is null)
+            {
+                Manager = new Entity.Manager();
+                CrudButtons.RowDefinitions.RemoveAt(1);
+                CrudButtons.Children.Remove(DeleteButton);
+            }
+            else
+            {
+                SurnameView.Text = this.Manager.Surname;
+                NameView.Text = this.Manager.Name;
+                SecnameView.Text = this.Manager.Secname;
+                MainDepComboBox.SelectedItem =
+                    OwnerDepartments
+                    .Where(d => d.Id == this.Manager.IdMainDep)
+                    .First();
+                SecDepComboBox.SelectedItem =
+                    OwnerDepartments
+                    .Where(d => d.Id == this.Manager.IdSecDep)
+                    .FirstOrDefault();
+            }
+            IdView.Text = Manager.Id.ToString();
         }
         #region BUTTONS_EVENTS
         private void SaveButton_MouseEnter(object sender, MouseEventArgs e)
@@ -82,7 +119,7 @@ namespace ADO_P201.CRUDWindows
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            //this.DialogResult = false; // те що поверне ShowDialog
+            this.DialogResult = false; // те що поверне ShowDialog
         }
 
         #endregion

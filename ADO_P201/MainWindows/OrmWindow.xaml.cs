@@ -288,7 +288,11 @@ namespace ADO_P201
             {
                 if (item.Content is Entity.Manager manager)
                 {
-                    ManagerCrudWindow dialog = new() { Owner = this };
+                    ManagerCrudWindow dialog = new()
+                    {
+                        Owner = this,
+                        Manager = manager
+                    };
                     dialog.ShowDialog();
 
                 }
