@@ -23,5 +23,10 @@ namespace ADO_P201.Entity
             Name = null;
             Secname = null;
         }
+
+        public override string ToString()
+        {
+            return $"{Id.ToString()[..4]} {Surname} {Name} {Secname} {IdMainDep} {IdSecDep} {IdChief}";
+        }
     }
 }

@@ -293,7 +293,10 @@ namespace ADO_P201
                         Owner = this,
                         Manager = manager
                     };
-                    dialog.ShowDialog();
+                    if (dialog.ShowDialog() == true) 
+                    {
+                        MessageBox.Show(dialog.Manager.ToString());
+                    }
 
                 }
             }

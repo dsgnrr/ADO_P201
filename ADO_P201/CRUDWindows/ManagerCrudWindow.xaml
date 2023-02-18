@@ -222,7 +222,8 @@
                     Background="BlueViolet"
                     Foreground="White"
                     Content="Clear"
-                    FontWeight="DemiBold"/>
+                    FontWeight="DemiBold"
+                    Click="ClearSecDepButton_Click"/>
             </Grid>
 
             <!--ID_CHIEF-->
@@ -245,11 +246,23 @@
                     x:Name="ChiefComboBox"
                     Background="#696969"
                     BorderThickness="0"
-                    Foreground="White"
+                    Foreground="#1f1f1f"
                     FontSize="15"
                     FontWeight="DemiBold"
                     Margin="5"
-                    Grid.Column="1"/>
+                    Grid.Column="1"
+                    ItemsSource="{Binding Managers}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Path=Surname}"/>
+                                <TextBlock Text=" "/>
+                                <TextBlock Text="{Binding Path=Name}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                
                 <Button
                     x:Name="ClearChiefButton"
                     Grid.Column="2"
@@ -258,7 +271,8 @@
                     Background="BlueViolet"
                     Foreground="White"
                     Content="Clear"
-                    FontWeight="DemiBold"/>
+                    FontWeight="DemiBold"
+                    Click="ClearChiefButton_Click"/>
             </Grid>
 
             <!--ErrorMessage-->
