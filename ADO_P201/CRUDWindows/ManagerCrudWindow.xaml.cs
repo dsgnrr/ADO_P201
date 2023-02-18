@@ -170,8 +170,12 @@ namespace ADO_P201.CRUDWindows
                     this.Manager.IdSecDep = secdep.Id;
                 else MessageBox.Show("SecDepComboBox.SelectedItem CAST Error");
 
-                this.Manager.IdChief =
-                 (ChiefComboBox.SelectedItem as Entity.Manager)?.Id;
+                if (ChiefComboBox.SelectedItem is null)
+                    this.Manager.IdChief = null;
+                else if (ChiefComboBox.SelectedItem is Entity.Manager manager)
+                    this.Manager.IdChief = manager.Id;
+                else MessageBox.Show("ChiefComboBox.SelectedItem CAST Error");
+
                 //    Product.Name = NameView.Text;
                 //    try
                 //    {
