@@ -1,4 +1,9 @@
 # ADO_P201 Homeworks
+## 16.02 Homework
+![alt text](https://github.com/dsgnrr/ADO_P201/blob/master/ADO_P201/Images/ManagerCrud1.png)
+![alt text](https://github.com/dsgnrr/ADO_P201/blob/master/ADO_P201/Images/ManagerCrud2.png)
+![alt text](https://github.com/dsgnrr/ADO_P201/blob/master/ADO_P201/Images/ManagerCrud3.png)
+![alt text](https://github.com/dsgnrr/ADO_P201/blob/master/ADO_P201/Images/ManagerCrud4.png)
 ## 15.02 Homework
 ![alt text](https://github.com/dsgnrr/ADO_P201/blob/master/ADO_P201/Images/create_department.png)
 ![alt text](https://github.com/dsgnrr/ADO_P201/blob/master/ADO_P201/Images/upd_department.png)
