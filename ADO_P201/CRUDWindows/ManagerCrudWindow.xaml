@@ -8,6 +8,7 @@
         Title="ManagerCrudWindow" Height="400" Width="400"
         Background="#1f1f1f"
         Loaded="Window_Loaded"
+        Closed="Window_Closed"
         WindowStartupLocation="CenterScreen">
     
     <Grid>
@@ -66,7 +67,7 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock
-                    Text="Surname:"
+                    Text="Surname*:"
                     Foreground="White"
                     FontSize="15"
                     FontWeight="DemiBold"
@@ -94,7 +95,7 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock
-                    Text="Name:"
+                    Text="Name*:"
                     Foreground="White"
                     FontSize="15"
                     FontWeight="DemiBold"
@@ -123,7 +124,7 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock
-                    Text="Secname:"
+                    Text="Secname*:"
                     Foreground="White"
                     FontSize="15"
                     FontWeight="DemiBold"
@@ -151,7 +152,7 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock
-                    Text="MainDep:"
+                    Text="MainDep*:"
                     Foreground="White"
                     FontSize="15"
                     FontWeight="DemiBold"

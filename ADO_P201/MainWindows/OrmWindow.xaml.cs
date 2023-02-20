@@ -273,7 +273,7 @@ namespace ADO_P201
                             cmd.Parameters.AddWithValue("@id", product.Id);
                             cmd.Parameters.AddWithValue("@name", product.Name);
                             cmd.Parameters.AddWithValue("@price", product.Price);
-                            ExecuteCommand(cmd, "Update Department Name");
+                            ExecuteCommand(cmd, "Update Department");
                             Products.Clear();
                             LoadProducts();
                         }
@@ -295,6 +295,48 @@ namespace ADO_P201
                     };
                     if (dialog.ShowDialog() == true) 
                     {
+                        if (dialog.Manager is null) //Delete
+                        {
+                            //string command =
+                            //    "DELETE FROM Departments " +
+                            //     $"WHERE Id = '{department.Id}'; ";
+                            //ExecuteCommand(command, $"Delete: {department.Name}");
+                            //Departments.Clear();
+                            //LoadDepartments();
+                        }
+                        else // Update
+                        {
+                            string command =
+                                @"UPDATE Managers 
+                                SET 
+                                Surname = @surname,
+                                Name = @name, 
+                                Secname = @secname, 
+                                Id_main_dep = @IdMainDep, 
+                                Id_sec_dep = @IdSecDep, 
+                                Id_chief = @IdChief
+                                WHERE Id = @id;";
+
+                            using SqlCommand cmd = new(command, _connection);
+                            cmd.Parameters.AddWithValue("@id", manager.Id);
+                            cmd.Parameters.AddWithValue("@surname", manager.Surname);
+                            cmd.Parameters.AddWithValue("@name", manager.Name);
+                            cmd.Parameters.AddWithValue("@secname", manager.Secname);
+                            cmd.Parameters.AddWithValue("@IdMainDep", manager.IdMainDep);
+                            if(manager.IdSecDep!= null)
+                                cmd.Parameters.AddWithValue("@IdSecDep", manager.IdSecDep);
+                            else
+                                cmd.Parameters.AddWithValue("@IdSecDep", DBNull.Value);
+
+                            if(manager.IdChief!=null)
+                                cmd.Parameters.AddWithValue("@IdChief", manager.IdChief);
+                            else
+                                cmd.Parameters.AddWithValue("@IdChief", DBNull.Value);
+
+                            ExecuteCommand(cmd, "Update Manager");
+                            Managers.Clear();
+                            LoadManagers();
+                        }
                         MessageBox.Show(dialog.Manager.ToString());
                     }
 
@@ -354,6 +396,48 @@ namespace ADO_P201
                 }
             }
         }
+
+
+        private void AddManagerButtoт_Click(object sender, RoutedEventArgs e)
+        {
+            ManagerCrudWindow dialog = new()
+            { 
+                Owner = this 
+            };
+            if (dialog.ShowDialog() == true) 
+            {
+                if(dialog.Manager is not null)
+                {
+                    string command =
+                               @"INSERT INTO Managers(Id, Surname, Name, Secname, Id_main_dep, Id_sec_dep, Id_chief) 
+                                VALUES( 
+                                @id, @surname, @name, @secname, @IdMainDep, @IdSecDep, @IdChief
+                                );";
+
+                    using SqlCommand cmd = new(command, _connection);
+                    cmd.Parameters.AddWithValue("@id", dialog.Manager.Id);
+                    cmd.Parameters.AddWithValue("@surname", dialog.Manager.Surname);
+                    cmd.Parameters.AddWithValue("@name", dialog.Manager.Name);
+                    cmd.Parameters.AddWithValue("@secname", dialog.Manager.Secname);
+                    cmd.Parameters.AddWithValue("@IdMainDep", dialog.Manager.IdMainDep);
+                    if (dialog.Manager.IdSecDep != null)
+                        cmd.Parameters.AddWithValue("@IdSecDep", dialog.Manager.IdSecDep);
+                    else
+                        cmd.Parameters.AddWithValue("@IdSecDep", DBNull.Value);
+
+                    if (dialog.Manager.IdChief != null)
+                        cmd.Parameters.AddWithValue("@IdChief", dialog.Manager.IdChief);
+                    else
+                        cmd.Parameters.AddWithValue("@IdChief", DBNull.Value);
+
+                    ExecuteCommand(cmd, "Create Manager");
+                    Managers.Clear();
+                    LoadManagers();
+                }
+            }
+        }
+
         #endregion
+
     }
 }

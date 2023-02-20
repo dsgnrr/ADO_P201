@@ -28,8 +28,6 @@ namespace ADO_P201.CRUDWindows
         private ObservableCollection<Entity.Department> OwnerDepartments;
 
         private bool SaveButtonState;
-        private bool inputWasChaged;
-        private bool stringIsEmpty;
         private DispatcherTimer timer;
         public ManagerCrudWindow()
         {
@@ -41,8 +39,6 @@ namespace ADO_P201.CRUDWindows
         private void BaseOptions()
         {
             SaveButtonState = true;
-            inputWasChaged = false;
-            stringIsEmpty = false;
 
             timer = new();
             timer.Interval = TimeSpan.FromMilliseconds(1);
@@ -52,48 +48,30 @@ namespace ADO_P201.CRUDWindows
         #region CONDITIONS
         private void CheckFields(object sender, EventArgs args)
         {
-            if (NameView.Text == Manager.Name)
-            {
-                SaveButtonState = false;
-                SaveButton.Background = Brushes.Gray;
-                SaveButton.Foreground = Brushes.Black;
-                ErrorText.Text = "*The text field contains the original value";
-                inputWasChaged = false;
-            }
-            else
-            {
-                inputWasChaged = true;
-                if (!stringIsEmpty)
-                {
-                    SaveButtonState = true;
-                    SaveButton.Background = Brushes.DarkGreen;
-                    SaveButton.Foreground = Brushes.White;
-                }
-            }
 
-            if (NameView.Text.Trim() == String.Empty )
+            if (NameView.Text.Trim() == String.Empty ||
+                SurnameView.Text.Trim() == String.Empty ||
+                SecnameView.Text.Trim() == String.Empty ||
+                MainDepComboBox.SelectedItem is null) 
             {
                 SaveButtonState = false;
                 SaveButton.Background = Brushes.Gray;
                 SaveButton.Foreground = Brushes.Black;
                 ErrorText.Text = "*Field is empty or contains only spaces";
-                stringIsEmpty = true;
+                
             }
             else
             {
-                stringIsEmpty = false;
-                if (inputWasChaged)
-                {
-                    SaveButtonState = true;
-                    SaveButton.Background = Brushes.DarkGreen;
-                    SaveButton.Foreground = Brushes.White;
-                }
+                SaveButtonState = true;
+                SaveButton.Background = Brushes.DarkGreen;
+                SaveButton.Foreground = Brushes.White;
             }
         }
 
 
         #endregion
 
+        #region WINDOW_EVENTS
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             if (Owner is OrmWindow owner)
@@ -110,12 +88,9 @@ namespace ADO_P201.CRUDWindows
             if(this.Manager is null)
             {
                 Manager = new Entity.Manager();
-                CrudButtons.RowDefinitions.RemoveAt(1);
-                CrudButtons.Children.Remove(DeleteButton);
-
-                WindowName.Text = "CREATE PRODUCT";
                 CrudButtons.ColumnDefinitions.RemoveAt(1);
                 CrudButtons.Children.Remove(DeleteButton);
+                WindowName.Text = "CREATE Manager";
             }
             else
             {
@@ -138,6 +113,14 @@ namespace ADO_P201.CRUDWindows
             }
             IdView.Text = Manager.Id.ToString();
         }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            timer.Stop();
+        }
+
+        #endregion
+
         #region BUTTONS_EVENTS
         private void SaveButton_MouseEnter(object sender, MouseEventArgs e)
         {
@@ -176,18 +159,6 @@ namespace ADO_P201.CRUDWindows
                     this.Manager.IdChief = manager.Id;
                 else MessageBox.Show("ChiefComboBox.SelectedItem CAST Error");
 
-                //    Product.Name = NameView.Text;
-                //    try
-                //    {
-                //        Product.Price = double.Parse(
-                //            PriceView.Text.Replace(',', '.'),
-                //            CultureInfo.InvariantCulture);
-                //    }
-                //    catch
-                //    {
-                //        MessageBox.Show("Неправильний формат числа для ціни");
-                //        return;
-                //    }
                 this.DialogResult = true;
             }
         }
@@ -222,5 +193,7 @@ namespace ADO_P201.CRUDWindows
         {
             ChiefComboBox.SelectedItem = null;
         }
+
+        
     }
 }

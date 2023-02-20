@@ -87,7 +87,8 @@ namespace ADO_P201
                 CREATE TABLE Products (
                 Id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
                 Name NVARCHAR(50) NOT NULL,
-                Price FLOAT NOT NULL);";
+                Price FLOAT NOT NULL,
+                DeleteDt DATETIME);";
 
             try
             {
