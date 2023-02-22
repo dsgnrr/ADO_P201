@@ -480,12 +480,33 @@ namespace ADO_P201
 
         private void AddSalesButton_Click(object sender, RoutedEventArgs e)
         {
+            SaleCrudWindow dialog = new() { Owner = this, Sale = null };
+            //dialog.ShowDialog();
+            if (dialog.ShowDialog() == true)
+            {
+                if (dialog.Sale is not null)
+                {
+                    string command =
+                               @"INSERT INTO Sales(Id, SaleDate, Quantity, Product_Id, Manager_Id) 
+                                VALUES( 
+                                @id, @saledate, @quantity, @product_id, @manager_id
+                                );";
+
+                    using SqlCommand cmd = new(command, _connection);
+                    cmd.Parameters.AddWithValue("@id", dialog.Sale.Id);
+                    cmd.Parameters.AddWithValue("@saledate", dialog.Sale.SaleDate);
+                    cmd.Parameters.AddWithValue("@quantity", dialog.Sale.Quantity);
+                    cmd.Parameters.AddWithValue("@product_id", dialog.Sale.ProductId);
+                    cmd.Parameters.AddWithValue("@manager_id", dialog.Sale.ManagerId);
+                    ExecuteCommand(cmd, "Create Manager");
+                    Sales.Clear();
+                    LoadSales();
+                }
+            }
 
         }
 
         #endregion
-
-
 
     }
 }

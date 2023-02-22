@@ -21,6 +21,7 @@ namespace ADO_P201.Entity
         {
             Id = Guid.NewGuid();
             Quantity = 1;
+            SaleDate = DateTime.Now;
         }
 
         public Sale(SqlDataReader reader)
