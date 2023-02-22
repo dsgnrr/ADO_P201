@@ -39,7 +39,6 @@ namespace ADO_P201.CRUDWindows
         private void BaseOptions()
         {
             SaveButtonState = true;
-
             timer = new();
             timer.Interval = TimeSpan.FromMilliseconds(1);
             timer.Tick += new EventHandler(CheckFields);
@@ -48,7 +47,6 @@ namespace ADO_P201.CRUDWindows
         #region CONDITIONS
         private void CheckFields(object sender, EventArgs args)
         {
-
             if (NameView.Text.Trim() == String.Empty ||
                 SurnameView.Text.Trim() == String.Empty ||
                 SecnameView.Text.Trim() == String.Empty ||
@@ -165,16 +163,16 @@ namespace ADO_P201.CRUDWindows
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            //var result = MessageBox.Show(
-            //     $"Do you really want to remove: {Product.Name}",
-            //     "Delete field",
-            //     MessageBoxButton.YesNo,
-            //     MessageBoxImage.Question);
-            //if (result == MessageBoxResult.Yes)
-            //{
-            //    Product = null;
-            //    this.DialogResult = true;
-            //}
+            var result = MessageBox.Show(
+                 $"Do you really want to remove: {Manager.Name} {Manager.Surname}",
+                 "Delete field",
+                 MessageBoxButton.YesNo,
+                 MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                Manager = null;
+                this.DialogResult = true;
+            }
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)

@@ -70,8 +70,6 @@ namespace ADO_P201.CRUDWindows
                 SaveButton.Foreground = Brushes.White;
             }
         }
-
-
         #endregion
 
         #region WINDOW_EVENTS
@@ -128,6 +126,7 @@ namespace ADO_P201.CRUDWindows
                 ErrorText.Visibility = Visibility.Visible;
             }
         }
+
         private void SaveButton_MouseLeave(object sender, MouseEventArgs e)
         {
             if (!SaveButtonState)
@@ -135,7 +134,6 @@ namespace ADO_P201.CRUDWindows
                 ErrorText.Visibility = Visibility.Hidden;
             }
         }
-
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
@@ -172,7 +170,7 @@ namespace ADO_P201.CRUDWindows
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             var result = MessageBox.Show(
-                 $"Do you really want to remove: {Sale.SaleDate.ToString()}",
+                 $"Do you really want to remove sale info about: {(ProductsComboBox.SelectedItem as Entity.Product).Name}",
                  "Delete field",
                  MessageBoxButton.YesNo,
                  MessageBoxImage.Question);

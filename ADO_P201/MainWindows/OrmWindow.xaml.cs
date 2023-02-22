@@ -110,16 +110,11 @@ namespace ADO_P201
             SqlCommand cmd = new() { Connection = _connection };
             try
             {
-                cmd.CommandText = "SELECT D.Id, D.Name FROM Departments D";
-
+                cmd.CommandText = "SELECT D.* FROM Departments D WHERE D.DeleteDt IS NULL";
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    Departments.Add(new Entity.Department
-                    {
-                        Id = reader.GetGuid(0),
-                        Name = reader.GetString(1)
-                    });
+                    Departments.Add(new(reader));
                 }
                 reader.Close();
                 cmd.Dispose();
@@ -141,8 +136,7 @@ namespace ADO_P201
             SqlCommand cmd = new() { Connection = _connection };
             try
             {
-                cmd.CommandText = "SELECT P.Id, P.* FROM Products P WHERE P.DeleteDt IS NULL";
-
+                cmd.CommandText = "SELECT P.* FROM Products P WHERE P.DeleteDt IS NULL";
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
@@ -168,25 +162,11 @@ namespace ADO_P201
             SqlCommand cmd = new() { Connection = _connection };
             try
             {
-                cmd.CommandText = "SELECT M.Id, M.Surname, M.Name, M.Secname, M.Id_main_dep, M.Id_sec_dep, M.Id_chief  FROM Managers M";
+                cmd.CommandText = "SELECT M.* FROM Managers M WHERE DeleteDt IS NULL";
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    Managers.Add(new Entity.Manager
-                    {
-                        Id = reader.GetGuid(0),
-                        Surname = reader.GetString(1),
-                        Name = reader.GetString(2),
-                        Secname = reader.GetString(3),
-                        IdMainDep = reader.GetGuid(4),
-                        IdSecDep = reader.GetValue(5) == DBNull.Value
-                        ? null
-                            : reader.GetGuid(5),
-                        IdChief = reader.IsDBNull(6)
-                        ? null
-                            : reader.GetGuid(6)
-
-                    });
+                    Managers.Add(new Entity.Manager(reader));
                 }
                 reader.Close();
                 cmd.Dispose();
@@ -208,7 +188,7 @@ namespace ADO_P201
             SqlCommand cmd = new() { Connection = _connection };
             try
             {
-                cmd.CommandText = "SELECT S.* FROM Sales S";
+                cmd.CommandText = "SELECT S.* FROM Sales S WHERE DeleteDt IS NULL";
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
@@ -246,8 +226,9 @@ namespace ADO_P201
                         if(_dialogDepartment.Department is null) //Delete
                         {
                             string command =
-                                "DELETE FROM Departments " +
-                                 $"WHERE Id = @id; ";
+                                @"UPDATE Departments
+                                  SET DeleteDt = CURRENT_TIMESTAMP
+                                  WHERE Id = @id; ";
                             using SqlCommand cmd = new(command, _connection);
                             cmd.Parameters.AddWithValue("@id", department.Id);
                             ExecuteCommand(cmd, $"Delete: {department.Name}");
@@ -258,9 +239,9 @@ namespace ADO_P201
                         {
                             //MessageBox.Show(department.ToString());                            
                             string command =
-                                "UPDATE Departments " +
-                                $"SET Name = @name "+
-                                $"WHERE Id=@id;";
+                                @"UPDATE Departments
+                                  SET Name = @name
+                                  WHERE Id=@id;";
                             using SqlCommand cmd = new(command, _connection);
                             cmd.Parameters.AddWithValue("@id", department.Id);
                             cmd.Parameters.AddWithValue("@name", department.Name);
@@ -279,27 +260,28 @@ namespace ADO_P201
             {
                 if (item.Content is Entity.Product product)
                 {
-                    //MessageBox.Show(product.ToString());
                     _dialogProduct = new();
                     _dialogProduct.Product = product;
                     if (_dialogProduct.ShowDialog() == true)
                     {
                         if (_dialogProduct.Product is null) //Delete
                         {
-                            //string command =
-                            //    "DELETE FROM Departments " +
-                            //     $"WHERE Id = '{department.Id}'; ";
-                            //ExecuteCommand(command, $"Delete: {department.Name}");
-                            //Departments.Clear();
-                            //LoadDepartments();
+                            string command =
+                                @"UPDATE Products
+                                  SET DeleteDt = CURRENT_TIMESTAMP
+                                  WHERE Id = @id; ";
+                            using SqlCommand cmd = new(command, _connection);
+                            cmd.Parameters.AddWithValue("@id", product.Id);
+                            ExecuteCommand(cmd, $"Delete: {product.Name}");
+                            Products.Clear();
+                            LoadProducts();
                         }
                         else // Update
                         {
-                            //MessageBox.Show(product.ToString());
                             string command =
-                                "UPDATE Products " +
-                                $"SET Name = @name, Price = @price " +
-                                $"WHERE Id=@id;";
+                                @"UPDATE Products
+                                SET Name = @name, Price = @price
+                                WHERE Id=@id;";
                             using SqlCommand cmd = new(command, _connection);
                             cmd.Parameters.AddWithValue("@id", product.Id);
                             cmd.Parameters.AddWithValue("@name", product.Name);
@@ -328,12 +310,15 @@ namespace ADO_P201
                     {
                         if (dialog.Manager is null) //Delete
                         {
-                            //string command =
-                            //    "DELETE FROM Departments " +
-                            //     $"WHERE Id = '{department.Id}'; ";
-                            //ExecuteCommand(command, $"Delete: {department.Name}");
-                            //Departments.Clear();
-                            //LoadDepartments();
+                            string command =
+                                @"UPDATE Managers
+                                  SET DeleteDt = CURRENT_TIMESTAMP
+                                  WHERE Id = @id; ";
+                            using SqlCommand cmd = new(command, _connection);
+                            cmd.Parameters.AddWithValue("@id", manager.Id);
+                            ExecuteCommand(cmd, $"Delete: {manager.Name} {manager.Surname}");
+                            Managers.Clear();
+                            LoadManagers();
                         }
                         else // Update
                         {
@@ -368,7 +353,6 @@ namespace ADO_P201
                             Managers.Clear();
                             LoadManagers();
                         }
-                        MessageBox.Show(dialog.Manager.ToString());
                     }
 
                 }
@@ -380,8 +364,42 @@ namespace ADO_P201
             if(sender is ListViewItem item)
             {
                 if(item.Content is Entity.Sale sale)
-                {
-                    MessageBox.Show(sale.SaleDate.ToString());
+                { 
+                    SaleCrudWindow dialog = new() { Owner = this, Sale = sale };
+                    if(dialog.ShowDialog()==true)
+                    {
+                        if(dialog.Sale is null)
+                        {
+                            string command =
+                               @"UPDATE Sales
+                                  SET DeleteDt = CURRENT_TIMESTAMP
+                                  WHERE Id = @id; ";
+                            using SqlCommand cmd = new(command, _connection);
+                            cmd.Parameters.AddWithValue("@id", sale.Id);
+                            var product = Products.Where(p => p.Id == sale.ProductId).FirstOrDefault();
+                            ExecuteCommand(cmd, $"Delete sale info about: {product.Name}");
+                            Sales.Clear();
+                            LoadSales();
+                        }
+                        else
+                        {
+                            string command =
+                               @"UPDATE Sales
+                                 SET
+                                 Quantity = @quantity, 
+                                 Product_Id = @product_id,
+                                 Manager_Id = @manager_id 
+                                 WHERE Id = @id;";
+                            using SqlCommand cmd = new(command, _connection);
+                            cmd.Parameters.AddWithValue("@id", dialog.Sale.Id);
+                            cmd.Parameters.AddWithValue("@quantity", dialog.Sale.Quantity);
+                            cmd.Parameters.AddWithValue("@product_id", dialog.Sale.ProductId);
+                            cmd.Parameters.AddWithValue("@manager_id", dialog.Sale.ManagerId);
+                            ExecuteCommand(cmd, "Update Sale");
+                            Sales.Clear();
+                            LoadSales();
+                        }
+                    }
                 }
             }
         }
@@ -498,7 +516,7 @@ namespace ADO_P201
                     cmd.Parameters.AddWithValue("@quantity", dialog.Sale.Quantity);
                     cmd.Parameters.AddWithValue("@product_id", dialog.Sale.ProductId);
                     cmd.Parameters.AddWithValue("@manager_id", dialog.Sale.ManagerId);
-                    ExecuteCommand(cmd, "Create Manager");
+                    ExecuteCommand(cmd, "Create Sale");
                     Sales.Clear();
                     LoadSales();
                 }

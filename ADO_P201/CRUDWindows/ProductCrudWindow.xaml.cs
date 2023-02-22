@@ -89,8 +89,6 @@ namespace ADO_P201
                 }
             }
         }
-
-
         #endregion
 
         #region WINDOW_EVENTS
