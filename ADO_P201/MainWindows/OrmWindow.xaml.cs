@@ -27,6 +27,7 @@ namespace ADO_P201
         public ObservableCollection<Entity.Department> Departments { get; set; } 
         public ObservableCollection<Entity.Product> Products { get; set; }
         public ObservableCollection<Entity.Manager> Managers { get; set; }
+        public ObservableCollection<Entity.Sale> Sales { get; set; }
 
         private SqlConnection _connection;
         
@@ -41,6 +42,7 @@ namespace ADO_P201
             Departments = new ObservableCollection<Entity.Department>();
             Products = new ObservableCollection<Entity.Product>();
             Managers = new ObservableCollection<Entity.Manager>();
+            Sales = new ObservableCollection<Sale>();
 
             DataContext = this;
 
@@ -54,7 +56,8 @@ namespace ADO_P201
             _connection.Open();
             LoadDepartments();
             LoadManagers();
-            LoadProducts();    
+            LoadProducts();
+            LoadSales();
         }
 
         #region SQL_COMMANDS
@@ -100,6 +103,7 @@ namespace ADO_P201
         #endregion
 
         #region LOAD_DATA
+
         //ЗАВАНТАЖИТИ ВІДДІЛИ
         private void LoadDepartments()
         {
@@ -130,6 +134,7 @@ namespace ADO_P201
                 this.Close();
             }
         }
+
         //ЗАВАНТАЖИТИ ТОВАРИ
         private void LoadProducts()
         {
@@ -182,6 +187,32 @@ namespace ADO_P201
                             : reader.GetGuid(6)
 
                     });
+                }
+                reader.Close();
+                cmd.Dispose();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Window will be closed",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                this.Close();
+            }
+        }
+
+        //ЗАВАНТАЖИТИ ПРОДАЖІ
+        private void LoadSales()
+        {
+            SqlCommand cmd = new() { Connection = _connection };
+            try
+            {
+                cmd.CommandText = "SELECT S.* FROM Sales S";
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Sales.Add(new Entity.Sale(reader));  
                 }
                 reader.Close();
                 cmd.Dispose();
@@ -343,6 +374,17 @@ namespace ADO_P201
                 }
             }
         }
+        
+        private void SalesItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if(sender is ListViewItem item)
+            {
+                if(item.Content is Entity.Sale sale)
+                {
+                    MessageBox.Show(sale.SaleDate.ToString());
+                }
+            }
+        }
         #endregion
 
         #region CREATE_NEW_ROWS_DB
@@ -397,7 +439,6 @@ namespace ADO_P201
             }
         }
 
-
         private void AddManagerButtoт_Click(object sender, RoutedEventArgs e)
         {
             ManagerCrudWindow dialog = new()
@@ -437,7 +478,14 @@ namespace ADO_P201
             }
         }
 
+        private void AddSalesButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         #endregion
+
+
 
     }
 }
