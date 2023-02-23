@@ -4,9 +4,51 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ADO_P201.MainWindows"
+        Loaded="Window_Loaded"
         mc:Ignorable="d"
         Title="DalWindow" Height="450" Width="800">
-    <Grid>
-        
+    <Grid ShowGridLines="True">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Vertical"
+                    Grid.Row="0" Grid.Column="0">
+            <Label Content="Відділи" HorizontalAlignment="Center"
+                   FontSize="22" FontWeight="DemiBold"/>
+            <ListView ItemsSource="{Binding DepartmentsList}" 
+                      ScrollViewer.VerticalScrollBarVisibility="Visible"
+                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                      MaxHeight="140">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn
+                            Header="Id"
+                            DisplayMemberBinding="{Binding Path=Id}"/>
+                        <GridViewColumn
+                            Header="Name"
+                            DisplayMemberBinding="{Binding Path=Name}"/>
+                    </GridView>
+                </ListView.View>
+                <ListView.Resources>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <EventSetter
+                            Event="MouseDoubleClick"
+                            Handler="DepartmentsItems_MouseDoubleClick"/>
+                    </Style>
+                </ListView.Resources>
+            </ListView>
+            <Button
+                x:Name="AddDepartmentButton"
+                Content="Новий відділ"
+                Margin="5"
+                Click="AddDepartmentButton_Click"/>
+        </StackPanel>
+
     </Grid>
 </Window>

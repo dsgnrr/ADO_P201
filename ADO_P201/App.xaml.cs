@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ADO_P201.Service;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -21,5 +22,6 @@ namespace ADO_P201
             Data Source=(LocalDB)\MSSQLLocalDB;
             AttachDbFilename=C:\Users\dsgnrr\source\repos\ADO_P201\ADO_P201\DataBase\ADO201.mdf;
             Integrated Security=True";
+        internal static readonly Logger Logger = new("log.txt");
     }
 }

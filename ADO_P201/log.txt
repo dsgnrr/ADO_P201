@@ -1,0 +1,1 @@
+SEVERE - 23.02.2023 11:28:54: DepartmentApiGetAll Invalid object name 'Departmegertgernts'.
