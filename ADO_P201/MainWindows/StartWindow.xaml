@@ -20,5 +20,9 @@
                 Margin="20 10"
                 Padding="20 5"
                 Click="OrmButton_Click"/>
+        <Button x:Name="DalButton" Content="3. DAL, Data Context"
+                Margin="20 10"
+                Padding="20 5"
+                Click="DalButton_Click"/>
     </StackPanel>
 </Window>
