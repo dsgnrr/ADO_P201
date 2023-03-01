@@ -11,6 +11,7 @@ namespace ADO_P201.DAL
     {
         private SqlConnection _connection;
         internal DepartmentApi Departments { get; set; }
+        internal ManagerApi Managers { get; set; }
 
         public DataContext()
         {
@@ -30,6 +31,7 @@ namespace ADO_P201.DAL
                 throw new Exception("Context creation failed. See server logs for details");
             }
             Departments = new(_connection);
+            Managers = new(_connection);
         }
     }
 }

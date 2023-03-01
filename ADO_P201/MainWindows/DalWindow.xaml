@@ -50,5 +50,53 @@
                 Click="AddDepartmentButton_Click"/>
         </StackPanel>
 
+        <StackPanel Orientation="Vertical"
+                    Grid.Row="0" Grid.Column="1">
+            <Label Content="Спвівробітники" HorizontalAlignment="Center"
+                   FontSize="22" FontWeight="DemiBold"/>
+            <ListView ItemsSource="{Binding ManagersList}" 
+                      ScrollViewer.VerticalScrollBarVisibility="Visible"
+                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                      MaxHeight="140">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn
+                            Header="Id"
+                            DisplayMemberBinding="{Binding Path=Id}"/>
+                        <GridViewColumn
+                            Header="Surname"
+                            DisplayMemberBinding="{Binding Path=Surname}"/>
+                        <GridViewColumn
+                            Header="Name"
+                            DisplayMemberBinding="{Binding Path=Name}"/>
+                        <GridViewColumn
+                            Header="Secname"
+                            DisplayMemberBinding="{Binding Path=Secname}"/>
+                        <GridViewColumn
+                            Header="IdMainDep"
+                            DisplayMemberBinding="{Binding Path=IdMainDep}"/>
+                        <GridViewColumn
+                            Header="IdSecDep"
+                            DisplayMemberBinding="{Binding Path=IdSecDep}"/>
+                        <GridViewColumn
+                            Header="IdChief"
+                            DisplayMemberBinding="{Binding Path=IdChief}"/>
+                    </GridView>
+                </ListView.View>
+                <ListView.Resources>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <EventSetter
+                            Event="MouseDoubleClick"
+                            Handler="ManagersItems_MouseDoubleClick"/>
+                    </Style>
+                </ListView.Resources>
+            </ListView>
+            <Button
+                x:Name="AddManagerButton"
+                Content="Новий співробітник"
+                Margin="5"
+                Click="AddManagerButton_Click"/>
+        </StackPanel>
+
     </Grid>
 </Window>
