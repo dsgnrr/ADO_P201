@@ -20,7 +20,80 @@ namespace ADO_P201.DAL
             list = null;
             this._dataContext = dataContext;
         }
+        /// <summary>
+        /// Delete a record from the database
+        /// </summary>
+        /// <param name="department"></param>
+        /// <returns></returns>
+        public bool Delete(Entity.Department department)
+        {
+            try
+            {
+                using SqlCommand cmd = new()
+                {
+                    Connection = _connection,
+                    CommandText = @"UPDATE Departments
+                                  SET DeleteDt = CURRENT_TIMESTAMP
+                                  WHERE Id = @id; "
+            };
+                cmd.Parameters.AddWithValue("@id", department.Id);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                String msg =
+                    DateTime.Now + ": " +
+                    this.GetType().Name +
+                    System.Reflection.MethodBase.GetCurrentMethod()?.Name +
+                    " " + ex.Message;
 
+                // TODO: LOG
+                App.Logger.Log(msg, "SEVERE");
+                return false;
+            }
+            return true;
+        }
+        /// <summary>
+        ///  Update a old record from the database
+        /// </summary>
+        /// <param name="department"></param>
+        /// <returns></returns>
+        public bool Update(Entity.Department department)
+        {
+            try
+            {
+                using SqlCommand cmd = new()
+                {
+                    Connection = _connection,
+                    CommandText = @"UPDATE Departments
+                                    SET
+                                    Name = @name
+                                    WHERE Id = @id;"
+                };
+                cmd.Parameters.AddWithValue("@id", department.Id);
+                cmd.Parameters.AddWithValue("@Name", department.Name);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                String msg =
+                    DateTime.Now + ": " +
+                    this.GetType().Name +
+                    System.Reflection.MethodBase.GetCurrentMethod()?.Name +
+                    " " + ex.Message;
+
+                // TODO: LOG
+                App.Logger.Log(msg, "SEVERE");
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Adds a new record to the database
+        /// </summary>
+        /// <param name="department"></param>
+        /// <returns></returns>
         public bool Add(Entity.Department department)
         {
             try

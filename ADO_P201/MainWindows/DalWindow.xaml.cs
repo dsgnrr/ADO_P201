@@ -47,7 +47,31 @@ namespace ADO_P201.MainWindows
             {
                 if(item.Content is Entity.Department department)
                 {
-                    MessageBox.Show(department.ToString());
+                    DepartmentCrudWindow dialog = new DepartmentCrudWindow() { Department = department };
+                    if (dialog.ShowDialog() == true) 
+                    {
+                        if(dialog.Department is null)
+                        {
+                            if (dataContext.Departments.Delete(department))
+                            {
+                                MessageBox.Show("Видалено успішно");
+                                DepartmentsList.Remove(department);
+                            }
+                            else
+                                MessageBox.Show("Помилка видалення");
+                        }
+                        else
+                        {
+                            if (dataContext.Departments.Update(dialog.Department))
+                            {
+                                MessageBox.Show("Оновлено успішно");
+                                DepartmentsList.Add(dialog.Department);
+                                DepartmentsList.Remove(department);
+                            }
+                            else
+                                MessageBox.Show("Помилка оновлення");
+                        }
+                    }
                 }
             }
         }
