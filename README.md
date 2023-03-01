@@ -3,6 +3,9 @@
 ![alt text](https://github.com/dsgnrr/ADO_P201/blob/master/ADO_P201/Images/hw8/DAL_DELETE_UPDATE.png)
 ![alt text](https://github.com/dsgnrr/ADO_P201/blob/master/ADO_P201/Images/hw8/DAL_DELETE.png)
 ![alt text](https://github.com/dsgnrr/ADO_P201/blob/master/ADO_P201/Images/hw8/DAL_UPDATE.png)
+![alt text](https://github.com/dsgnrr/ADO_P201/blob/master/ADO_P201/Images/hw8/NEW_DAL.png)
+![alt text](https://github.com/dsgnrr/ADO_P201/blob/master/ADO_P201/Images/hw8/UPDATE_DAL.png)
+![alt text](https://github.com/dsgnrr/ADO_P201/blob/master/ADO_P201/Images/hw8/DELETE_DAL.png)
 ## 22.02 Homework
 ![alt text](https://github.com/dsgnrr/ADO_P201/blob/master/ADO_P201/Images/hw7/SaleCrudWindow1.png)
 ![alt text](https://github.com/dsgnrr/ADO_P201/blob/master/ADO_P201/Images/hw7/SaleCrudWindow2.png)
