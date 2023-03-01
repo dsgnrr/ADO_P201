@@ -78,6 +78,23 @@ namespace ADO_P201.Entity
                     .Find(d => d.Id == this.IdSecDep);
             }
         }
-
+        public Entity.Manager? Chief
+        {
+            get
+            {
+                return dataContext?
+                    .Managers
+                    .GetAll()
+                    .Find(m => m.Id == this.IdChief);
+            }
+        }
+        public List<Entity.Manager>? Subordinates
+        {
+            get => dataContext?
+                .Managers
+                .GetAll()
+                .Where(m => m.Id == this.IdChief)
+                .ToList();
+        }
     }
 }

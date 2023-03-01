@@ -93,7 +93,7 @@ namespace ADO_P201.MainWindows
         {
             DepartmentCrudWindow dialog = new();
 
-            if(dialog.ShowDialog()==true)
+            if (dialog.ShowDialog() == true) 
             {
                 if(dataContext.Departments.Add(dialog.Department))
                 {
@@ -108,7 +108,7 @@ namespace ADO_P201.MainWindows
         private void AddManagerButton_Click(object sender, RoutedEventArgs e)
         {
             ManagerCrudWindow dialog = new();
-            if(dialog.ShowDialog()==true)
+            if (dialog.ShowDialog() == true)
             {
 
             }

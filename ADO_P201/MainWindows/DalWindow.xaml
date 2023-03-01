@@ -82,8 +82,11 @@
                             Header="SecDep"
                             DisplayMemberBinding="{Binding Path=SecDep.Name}"/>
                         <GridViewColumn
-                            Header="IdChief"
-                            DisplayMemberBinding="{Binding Path=IdChief}"/>
+                            Header="Chief"
+                            DisplayMemberBinding="{Binding Path=Chief.Surname}"/>
+                        <GridViewColumn
+                            Header="Subordinates"
+                            DisplayMemberBinding="{Binding Path=Subordinates.Count}"/>
                     </GridView>
                 </ListView.View>
                 <ListView.Resources>
