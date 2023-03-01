@@ -30,8 +30,8 @@ namespace ADO_P201.DAL
                 App.Logger.Log(msg,"SEVERE");
                 throw new Exception("Context creation failed. See server logs for details");
             }
-            Departments = new(_connection);
-            Managers = new(_connection);
+            Departments = new(_connection,this);
+            Managers = new(_connection, this);
         }
     }
 }

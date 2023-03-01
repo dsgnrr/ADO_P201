@@ -12,9 +12,13 @@ namespace ADO_P201.DAL
     internal class DepartmentApi
     {
         private readonly SqlConnection _connection;
-        public DepartmentApi(SqlConnection connection)
+        private List<Entity.Department> list;
+        private readonly DataContext _dataContext;
+        public DepartmentApi(SqlConnection connection, DataContext dataContext)
         {
             _connection = connection;
+            list = null;
+            this._dataContext = dataContext;
         }
 
         public bool Add(Entity.Department department)
@@ -46,9 +50,16 @@ namespace ADO_P201.DAL
             return true;
         }
 
-        public List<Entity.Department> GetAll()
+        /// <summary>
+        /// Returns list of DB table Departments
+        /// </summary>
+        /// <param name="reload">Send new query or use cached data</param>
+        /// <returns></returns>
+        public List<Entity.Department> GetAll(bool reload = false)
         {
-            var list = new List<Entity.Department>();
+            if (list != null && !reload)
+                return list;
+            list = new List<Entity.Department>();
             try
             {
                 using SqlCommand cmd = new()
@@ -62,7 +73,7 @@ namespace ADO_P201.DAL
                 using var reader = cmd.ExecuteReader();
 
                 while (reader.Read())
-                    list.Add(new(reader));
+                    list.Add(new(reader) { dataContext = _dataContext });
             }
             catch(Exception ex)
             {

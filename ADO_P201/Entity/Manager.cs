@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ADO_P201.DAL;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -53,5 +54,30 @@ namespace ADO_P201.Entity
         {
             return $"{Id.ToString()[..4]} {Surname} {Name} {Secname} {IdMainDep} {IdSecDep} {IdChief}";
         }
+
+        //// NAVIGATION PROPERTIES ////
+
+        internal DataContext? dataContext;
+
+        public Entity.Department? MainDep {
+            get
+            {
+                return dataContext?
+                    .Departments
+                    .GetAll()
+                    .Find(d => d.Id == this.IdMainDep);
+            }        
+        }
+        public Entity.Department? SecDep
+        {
+            get
+            {
+                return dataContext?
+                    .Departments
+                    .GetAll()
+                    .Find(d => d.Id == this.IdSecDep);
+            }
+        }
+
     }
 }

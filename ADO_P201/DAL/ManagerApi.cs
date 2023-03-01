@@ -11,14 +11,17 @@ namespace ADO_P201.DAL
     internal class ManagerApi
     {
         private readonly SqlConnection _connection;
-        public ManagerApi(SqlConnection connection)
+        private readonly DataContext _dataContext;
+        private List<Entity.Manager> list;
+        public ManagerApi(SqlConnection connection, DataContext dataContext)
         {
             _connection = connection;
-            
+            _dataContext = dataContext;
         }
         public List<Entity.Manager> GetAll(bool includeDeleteDt = false)
         {
-            var list = new List<Entity.Manager>();
+            if (list is not null) return list;
+            list = new List<Entity.Manager>();
             string query = @"SELECT M.*
                                 FROM Managers M";
             if (!includeDeleteDt)
@@ -34,7 +37,7 @@ namespace ADO_P201.DAL
                 using var reader = cmd.ExecuteReader();
 
                 while (reader.Read())
-                    list.Add(new(reader));
+                    list.Add(new(reader) { dataContext = _dataContext });
             }
             catch (Exception ex)
             {
