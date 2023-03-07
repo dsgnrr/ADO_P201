@@ -7,9 +7,12 @@ using System.Threading.Tasks;
 
 namespace ADO_P201.EFCore
 {
-    internal class EfContext : DbContext
+    public class EfContext : DbContext
     {
-        internal DbSet<Department> Departments { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Manager> Managers { get; set; }
+        public DbSet<Sale> Sales { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

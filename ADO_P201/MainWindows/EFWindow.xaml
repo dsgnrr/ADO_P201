@@ -5,8 +5,52 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ADO_P201.MainWindows"
         mc:Ignorable="d"
+        Loaded="Window_Loaded"
         Title="EFWindow" Height="450" Width="800">
-    <Grid>
-        
+    <Grid ShowGridLines="True">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Vertical">
+            <Label Content="Monitor"
+                   HorizontalAlignment="Center"
+                   FontSize="18"/>
+            <TextBlock x:Name="MonitorBlock"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Vertical"
+                    Grid.Row="0"
+                    Grid.Column="1">
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <Label Content="Departments"
+                       FontSize="18"/>
+                <Button Content="+"
+                        FontSize="18"
+                        Margin="7 3"
+                        Padding="7 1 7 5"
+                        x:Name="AddDepartmentButton"
+                        Click="AddDepartmentButton_Click"/>
+            </StackPanel>
+            <ListView x:Name="depList">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn
+                            Header="Id"
+                            DisplayMemberBinding="{Binding Path=Id}"/>
+                        <GridViewColumn
+                            Header="Name"
+                            DisplayMemberBinding="{Binding Path=Name}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </StackPanel>
     </Grid>
 </Window>

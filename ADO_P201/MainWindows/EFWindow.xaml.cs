@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ADO_P201.EFCore;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +21,43 @@ namespace ADO_P201.MainWindows
     /// </summary>
     public partial class EFWindow : Window
     {
+        internal EfContext efContext { get; set; } = new();
         public EFWindow()
         {
             InitializeComponent();
+            this.DataContext = efContext;
+            efContext.Departments.Load();
+            depList.ItemsSource = efContext
+                .Departments
+                .Local
+                .ToObservableCollection();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            MonitorBlock.Text = "Departments: " +
+                efContext.Departments.Count().ToString();
+        }
+
+        private void AddDepartmentButton_Click(object sender, RoutedEventArgs e)
+        {
+            DepartmentCrudWindow dialog = new();
+            if(dialog.ShowDialog()==true)
+            {
+                //dialog.Department -- інша сутність, треба замінити під EF
+                efContext.Departments.Add(
+                    new Department()
+                    {
+                        Name = dialog.Department.Name,
+                        Id = dialog.Department.Id
+                    }
+                    );
+                // !! Додавання даних до контексту не додає їх до БД -- планування додавання
+                efContext.SaveChanges(); // внесення змін до БД
+
+                MonitorBlock.Text += "\nDepartments: " +
+                    efContext.Departments.Count().ToString();
+            }
         }
     }
 }

@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace ADO_P201.EFCore
 {
-    public class Department
+    public class Product
     {
         public Guid Id { get; set; }
-        public String Name { get; set; }
+        public string Name { get; set; }
+        public double Price { get; set; }
         public DateTime? DeleteDt { get; set; }
     }
 }
