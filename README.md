@@ -1,14 +1,11 @@
 # ADO_P201 Homeworks
 ## 08.03 Homework
 ### Delete department
-***
 ![alt text](https://github.com/dsgnrr/ADO_P201/blob/master/ADO_P201/Images/hw11/delete_department.gif)
 ## 02.03 Homework
 ### Create new department
-***
 ![alt text](https://github.com/dsgnrr/ADO_P201/blob/master/ADO_P201/Images/hw10/create_department.gif)
 ### Edit department
-***
 ![alt text](https://github.com/dsgnrr/ADO_P201/blob/master/ADO_P201/Images/hw10/edit_department.gif)
 ## 01.03 Homework
 ![alt text](https://github.com/dsgnrr/ADO_P201/blob/master/ADO_P201/Images/hw9/Screenshot_1.png)
