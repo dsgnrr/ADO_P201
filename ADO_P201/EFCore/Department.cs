@@ -11,5 +11,10 @@ namespace ADO_P201.EFCore
         public Guid Id { get; set; }
         public String Name { get; set; }
         public DateTime? DeleteDt { get; set; }
+
+        public override string ToString()
+        {
+            return Id.ToString()[..5] + "..." + Name;
+        }
     }
 }

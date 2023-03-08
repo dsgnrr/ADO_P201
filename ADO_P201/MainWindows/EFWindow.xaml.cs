@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace ADO_P201.MainWindows
     public partial class EFWindow : Window
     {
         internal EfContext efContext { get; set; } = new();
+        private ICollectionView depListView;
         public EFWindow()
         {
             InitializeComponent();
@@ -31,12 +33,17 @@ namespace ADO_P201.MainWindows
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            UpdateMonitor();
+         
             efContext.Departments.Load();
             depList.ItemsSource = efContext
                 .Departments
                 .Local
                 .ToObservableCollection();
+            //отримання посилання на depList, але як інтерфейс ICollectionView
+            depListView = CollectionViewSource.GetDefaultView(depList.ItemsSource);
+            depListView.Filter = //Predicate<object>
+                obj => (obj as Department)?.DeleteDt == null;
+            UpdateMonitor();
         }
         
         public void UpdateMonitor()
@@ -52,6 +59,7 @@ namespace ADO_P201.MainWindows
 
 
         }
+
 
         private void AddDepartmentButton_Click(object sender, RoutedEventArgs e)
         {
@@ -72,6 +80,44 @@ namespace ADO_P201.MainWindows
                 MonitorBlock.Text += "\nDepartments: " +
                     efContext.Departments.Count().ToString();
             }
+        }
+
+
+        #region DOUBLE_CLICKS
+        private void DepartmentItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if(sender is ListViewItem item)
+            {
+                if(item.Content is Department department)
+                {
+                    MessageBox.Show(department.ToString());
+                }
+            }
+        }
+        #endregion
+
+       private bool DepartmentsDeletedFilter(object item)
+        {
+            if (item is Department department)
+                return department.DeleteDt == null;
+            return false;
+        }
+
+        private void ShowAllDepsCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            depListView.Filter = null;// скидаємо фільтр -- показує усі дані
+            
+            ((GridView)depList.View) // Властивості Visivle для колонок ListView немає, тому
+                .Columns[2]          // приховування/відображення через встановлення Width
+                .Width = Double.NaN; // Double.NaN - автоматичне визначення
+        }
+
+        private void ShowAllDepsCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            //depListView.Filter = //Predicate<object>
+            //    obj => (obj as Department)?.DeleteDt == null;
+            depListView.Filter = DepartmentsDeletedFilter;
+            ((GridView)depList.View).Columns[2].Width = 0;
         }
     }
 }

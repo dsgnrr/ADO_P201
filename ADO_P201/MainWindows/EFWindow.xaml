@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ADO_P201.MainWindows"
         mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded"
-        Title="EFWindow" Height="450" Width="800">
+        Title="EFWindow" Height="650" Width="1000">
     <Grid ShowGridLines="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -30,6 +31,12 @@
                     Grid.Column="1">
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center">
+                <CheckBox x:Name="ShowAllDepsCheckBox"
+                          Content="Show deleted"
+                          VerticalAlignment="Center"
+                          Margin="10 0 35 0"
+                          Checked="ShowAllDepsCheckBox_Checked"
+                          Unchecked="ShowAllDepsCheckBox_Unchecked"/>
                 <Label Content="Departments"
                        FontSize="18"/>
                 <Button Content="+"
@@ -41,7 +48,7 @@
             </StackPanel>
             <ListView x:Name="depList"
                       ScrollViewer.VerticalScrollBarVisibility="Auto"
-                      MaxHeight="175">
+                      MaxHeight="370">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn
@@ -50,8 +57,19 @@
                         <GridViewColumn
                             Header="Name"
                             DisplayMemberBinding="{Binding Path=Name}"/>
+                        <GridViewColumn
+                            Width="0"
+                            Header="DeleteDt"
+                            DisplayMemberBinding="{Binding Path=DeleteDt}"/>
                     </GridView>
                 </ListView.View>
+                <ListView.Resources>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <EventSetter
+                            Event="MouseDoubleClick"
+                            Handler="DepartmentItem_MouseDoubleClick"/>
+                    </Style>
+                </ListView.Resources>
             </ListView>
         </StackPanel>
     </Grid>
