@@ -26,17 +26,31 @@ namespace ADO_P201.MainWindows
         {
             InitializeComponent();
             this.DataContext = efContext;
+            
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            UpdateMonitor();
             efContext.Departments.Load();
             depList.ItemsSource = efContext
                 .Departments
                 .Local
                 .ToObservableCollection();
         }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        
+        public void UpdateMonitor()
         {
             MonitorBlock.Text = "Departments: " +
                 efContext.Departments.Count().ToString();
+            MonitorBlock.Text += "\nProducts: " +
+                efContext.Products.Count().ToString();
+            MonitorBlock.Text += "\nManagers: " +
+                efContext.Managers.Count().ToString();
+            MonitorBlock.Text += "\nSales: " +
+                efContext.Sales.Count().ToString();
+
+
         }
 
         private void AddDepartmentButton_Click(object sender, RoutedEventArgs e)

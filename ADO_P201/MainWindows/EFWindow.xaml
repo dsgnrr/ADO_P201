@@ -39,7 +39,9 @@
                         x:Name="AddDepartmentButton"
                         Click="AddDepartmentButton_Click"/>
             </StackPanel>
-            <ListView x:Name="depList">
+            <ListView x:Name="depList"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      MaxHeight="175">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn

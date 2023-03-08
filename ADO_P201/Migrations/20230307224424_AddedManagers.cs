@@ -16,9 +16,9 @@ namespace ADO_P201.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Secname = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Secname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IdMainDep = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IdSecDep = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IdChief = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
