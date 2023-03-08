@@ -28,7 +28,6 @@ namespace ADO_P201.MainWindows
         {
             InitializeComponent();
             this.DataContext = efContext;
-            
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -90,7 +89,28 @@ namespace ADO_P201.MainWindows
             {
                 if(item.Content is Department department)
                 {
-                    MessageBox.Show(department.ToString());
+                    DepartmentCrudWindow dialog = new();
+                    dialog.Department = new Entity.Department()
+                    {
+                        Id = department.Id,
+                        Name = department.Name
+                    };
+                    if(dialog.ShowDialog()==true)
+                    {
+                        if(dialog.Department is null)
+                        {
+                            department.DeleteDt = DateTime.Now;
+                            depListView.Filter = DepartmentsDeletedFilter;
+                            efContext.SaveChanges();
+                        }
+                        else
+                        {
+                            department.Name = dialog.Department.Name;
+                            depList.Items.Refresh();
+                            efContext.SaveChanges();
+                        }
+                    }
+                  
                 }
             }
         }
