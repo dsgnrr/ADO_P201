@@ -182,7 +182,23 @@
                        Content="Deleted check count:"/>
                 <Label Grid.Row="6" Grid.Column="1"
                        x:Name="DeletedCheckCnt"/>
+                <Separator Grid.Row="7"
+                           Grid.ColumnSpan="2"/>
 
+                <Label Grid.Row="8" Grid.Column="0"
+                       Content="Best Product checks:"/>
+                <Label Grid.Row="8" Grid.Column="1"
+                       x:Name="BestProduct"/>
+
+                <Label Grid.Row="9" Grid.Column="0"
+                       Content="Best Product:"/>
+                <Label Grid.Row="9" Grid.Column="1"
+                       x:Name="BestProductCnt"/>
+
+                <Label Grid.Row="10" Grid.Column="0"
+                       Content="Best Product sum:"/>
+                <Label Grid.Row="10" Grid.Column="1"
+                       x:Name="BestProductSum"/>
             </Grid>
         </StackPanel>
     </Grid>

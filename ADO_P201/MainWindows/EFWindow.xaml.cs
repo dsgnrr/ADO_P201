@@ -202,7 +202,91 @@ namespace ADO_P201.MainWindows
                 // Повернення - чеки, що є видаленими (кількість чеків за сьогодні)
                 DeletedCheckCnt.Content = efContext.Sales.Where(s => s.DeleteDt != null && s.SaleDate == DateTime.Today).Count();
 
-               
+                ///////////////////////////////////////////////////////////////////////
+                ///
+
+                //var query = efContext.Sales
+                //    .Where(s=>s.SaleDt.Date==DateTime.Today)
+                //    .GroupBy(s => s.ProductId);// групування за s.ProductId
+
+                //foreach (IGrouping<Guid,Sale> grp in query)
+                //{
+                //    LogBlock.Text += grp.Key.ToString() + " " +// Guid - s.ProductId
+                //        grp.Count() + "\n";
+                //        // grp - це коллекція Sale, що має однаковий grp.Key (ProductId)
+                //}
+
+                //var query2 = efContext.Sales
+                //   .Where(s => s.SaleDt.Date == DateTime.Today)
+                //   .GroupBy(s => s.ProductId)   //  Після .GroupBy утворюється "коллекція" IGrouping<Guid,Sale> grp
+                //   .ToList()
+                //   .Join(                       //  .Join відбувається не з Sales, а з grp
+                //        efContext.Products,     //  1) з чим поэднуэмо (inner)
+                //        grp => grp.Key,         //  2) outerKey - ключ з "grp"
+                //        p => p.Id,              //  3) innerKey - ключ з Products (p)
+                //        (grp, p) => new         //  4) resultSelector - правило за яким
+                //        {                       //      з поєднаної пари (grp, p) утворюється нова
+                //            Name = p.Name,      //      послідовність ("колекція") - новий об'єкт
+                //            Cnt = grp.Count()   //      анонімного типу
+                //        }                       //
+                //    );// групування за s.ProductId
+                //LogBlock.Text = "";
+                //foreach (var item in query2)
+                //{
+                //    LogBlock.Text += $"{item.Name} -- {item.Cnt}\n";
+                //}
+                ///////////////////////////////////////////////////////////////////////////////////////////////
+                ///
+
+                //HOMEWORK
+                //ChecksCount
+                var query1 = efContext.Products
+                   .GroupJoin(
+                        efContext.Sales.Where(s => s.SaleDate.Date == DateTime.Today),
+                         p => p.Id,
+                         s => s.ProductId,
+                         (p, sales) => new
+                         {
+                             Name = p.Name,
+                             Cnt = sales.Count()
+                         }
+                    ).OrderByDescending(g => g.Cnt);
+                //foreach (var item in query1)
+                //{
+                //    LogBlock.Text += $"{item.Name} -- {item.Cnt}\n";
+                //}
+                BestProduct.Content = query1
+                    .First().Name + " " + query1.First().Cnt + "pcs.";
+
+                //SaleQuantity
+                var query2 = efContext.Products
+                   .GroupJoin(
+                        efContext.Sales.Where(s => s.SaleDate.Date == DateTime.Today),
+                         p => p.Id,
+                         s => s.ProductId,
+                         (p, sales) => new
+                         {
+                             Name = p.Name,
+                             QuantitySum = sales.Sum(s => s.Quantity)
+                         }
+                    ).OrderByDescending(g => g.QuantitySum);
+                BestProductCnt.Content = query2
+                    .First().Name + " " + query2.First().QuantitySum + "pcs.";
+
+                //Sum
+                var query3 = efContext.Products
+                    .GroupJoin(
+                        efContext.Sales.Where(s => s.SaleDate.Date == DateTime.Today),
+                        p => p.Id,
+                        s => s.ProductId,
+                        (p, sales) => new
+                        {
+                            Name = p.Name,
+                            Sum = sales.Sum(s => s.Quantity) * p.Price
+                        }
+                    ).OrderByDescending(g => g.Sum);
+                BestProductSum.Content = query3.First().Name + " " + query3.First().Sum + "grn.";
+
             }
         }
 
