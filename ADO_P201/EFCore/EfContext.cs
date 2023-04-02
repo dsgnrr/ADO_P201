@@ -31,6 +31,27 @@ namespace ADO_P201.EFCore
             SeedDepartments(modelBuilder);
             SeedProducts(modelBuilder);
             SeedManagers(modelBuilder);
+
+            // налагодження відношень між сутностями
+            modelBuilder.Entity<Manager>()          // Відносини один-до-багатьох
+                .HasOne(m => m.MainDep)             // У Manager нав. вл. MainDep
+                .WithMany(d => d.Workers)           // У її типу (Department) - це Workers
+                .HasForeignKey(m => m.IdMainDep)    // Зовнішній ключ (IdMainDep) - потрібно, оскільки не "DepartmentId"
+                .HasPrincipalKey(d => d.Id);        // (опціонально) внутрішній ключ
+
+            modelBuilder.Entity<Manager>()
+                .HasOne(m => m.SecDep)
+                .WithMany(d => d.SubWorkers)
+                .HasForeignKey(m => m.IdSecDep)
+                .HasPrincipalKey(d => d.Id);
+
+            modelBuilder.Entity<Sale>()
+                .HasOne(s => s.Manager)
+                .WithMany(m => m.Sales);
+
+            modelBuilder.Entity<Sale>()
+                .HasOne(s => s.Product)
+                .WithMany(p => p.Sales);
         }
 
         #region Data seed

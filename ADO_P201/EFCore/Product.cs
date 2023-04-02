@@ -12,5 +12,14 @@ namespace ADO_P201.EFCore
         public string Name { get; set; }
         public double Price { get; set; }
         public DateTime? DeleteDt { get; set; }
+
+        // NAVIGATION PROPERTIES /////////////////
+
+
+        // колекція продажів(чеків)
+        public List<Sale> Sales { get; set; }
+
+        // колекція усіх продавців даного товару
+        public List<Manager> Managers { get; set; }
     }
 }

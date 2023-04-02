@@ -20,5 +20,15 @@ namespace ADO_P201.EFCore
         public Guid? IdSecDep { get; set; } 
         public Guid? IdChief { get; set; } 
         public DateTime? DeleteDt { get; set; }
+
+        // NAVIGATION PROPERTIES /////////////////
+        public Department MainDep { get; set; }
+        public Department SecDep { get; set; }
+
+        // колекція продажів(чеків)
+        public List<Sale> Sales { get; set; }
+
+        // колекція проданих товарів
+        public List<Product> Products { get; set; }
     }
 }

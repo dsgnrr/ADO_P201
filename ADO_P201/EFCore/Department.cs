@@ -16,5 +16,11 @@ namespace ADO_P201.EFCore
         {
             return Id.ToString()[..5] + "..." + Name;
         }
+
+
+        // NAVIGATION PROPERTIES /////////////////
+
+        public List<Manager> Workers { get; set; }
+        public List<Manager> SubWorkers { get; set; }
     }
 }

@@ -34,7 +34,7 @@ namespace ADO_P201.MainWindows
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
+            efContext.Sales.Load();
             efContext.Departments.Load();
             depList.ItemsSource = efContext
                 .Departments
@@ -44,10 +44,17 @@ namespace ADO_P201.MainWindows
             depListView = CollectionViewSource.GetDefaultView(depList.ItemsSource);
             depListView.Filter = //Predicate<object>
                 obj => (obj as Department)?.DeleteDt == null;
+
+            efContext.Managers.Load();
+            manList.ItemsSource = efContext
+                .Managers
+                .Local
+                .ToObservableCollection();
             UpdateMonitor();
             UpdateDailyStatistics();
         }
 
+        #region DataInfo
         public void UpdateMonitor()
         {
             DepMonitor.Content = efContext.Departments.Count().ToString();
@@ -55,124 +62,6 @@ namespace ADO_P201.MainWindows
             ManMonitor.Content = efContext.Managers.Count().ToString();
             SaleMonitor.Content = efContext.Sales.Count().ToString();
         }
-
-        #region CRUD
-        private void GenerateSalesButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Випадковий менеджер з наявних
-            // Manager manager =  // "-" отримання .ToList() передає всі дані, для BigData неприйнятно
-            //    efContext.Managers.ToList()[random.Next(efContext.Managers.Count())];
-            // Manager manager = // System.InvalidOperationException - LINQ-to-Entity перекладає запит на SQL. Не всі 
-            //    efContext.Managers.ElementAt(random.Next(efContext.Managers.Count())); // можливості мови C# мають аналоги у SQL
-            // DbSet приймає методи розширення LINQ, але не всі вони врешті спрацьовують, оскільки
-            //    це LINQ-to-Entity (LINQ-to-SQL), що накладає певні обмеження
-
-            double maxPrice = efContext.Products.Max(p => p.Price);
-            int manCnt = efContext.Managers.Count();
-            int proCnt = efContext.Products.Count();
-
-            for (int i = 0; i < 100; i++)
-            {
-                Manager manager = efContext.Managers.Skip(random.Next(manCnt)).First();
-                // Випадковий товар
-                Product product = efContext.Products.Skip(random.Next(proCnt)).First();
-                // Випадкова кількість, але чим дорожче товар, тим менша гранична кількість
-                int quantity = random.Next(1,
-                    (int)(20 * (1 - product.Price / maxPrice) + 2));
-
-                efContext.Sales.Add(new()
-                {
-                    Id = Guid.NewGuid(),
-                    ManagerId = manager.Id,
-                    ProductId = product.Id,
-                    Quantity = quantity,
-                    SaleDate = DateTime.Today.AddSeconds(random.Next(0, 86400))  // Дата "сьогодні" але з випадковим часом
-                });
-            }
-            efContext.SaveChanges();
-            UpdateMonitor();
-            UpdateDailyStatistics();
-        }
-
-        private void DepartmentItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (sender is ListViewItem item)
-            {
-                if (item.Content is Department department)
-                {
-                    DepartmentCrudWindow dialog = new();
-                    dialog.Department = new Entity.Department()
-                    {
-                        Id = department.Id,
-                        Name = department.Name
-                    };
-                    if (dialog.ShowDialog() == true)
-                    {
-                        if (dialog.Department is null)
-                        {
-                            department.DeleteDt = DateTime.Now;
-                            depListView.Filter = DepartmentsDeletedFilter;
-                            efContext.SaveChanges();
-                        }
-                        else
-                        {
-                            department.Name = dialog.Department.Name;
-                            depList.Items.Refresh();
-                            efContext.SaveChanges();
-                        }
-                    }
-
-                }
-            }
-        }
-
-        private void AddDepartmentButton_Click(object sender, RoutedEventArgs e)
-        {
-            DepartmentCrudWindow dialog = new();
-            if (dialog.ShowDialog() == true)
-            {
-                //dialog.Department -- інша сутність, треба замінити під EF
-                efContext.Departments.Add(
-                    new Department()
-                    {
-                        Name = dialog.Department.Name,
-                        Id = dialog.Department.Id
-                    }
-                    );
-                // !! Додавання даних до контексту не додає їх до БД -- планування додавання
-                efContext.SaveChanges(); // внесення змін до БД
-                UpdateMonitor();
-            }
-        }
-
-        #endregion
-
-        #region FILTER
-        private bool DepartmentsDeletedFilter(object item)
-        {
-            if (item is Department department)
-                return department.DeleteDt == null;
-            return false;
-        }
-
-        private void ShowAllDepsCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            depListView.Filter = null;// скидаємо фільтр -- показує усі дані
-
-            ((GridView)depList.View) // Властивості Visivle для колонок ListView немає, тому
-                .Columns[2]          // приховування/відображення через встановлення Width
-                .Width = Double.NaN; // Double.NaN - автоматичне визначення
-        }
-
-        private void ShowAllDepsCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            //depListView.Filter = //Predicate<object>
-            //    obj => (obj as Department)?.DeleteDt == null;
-            depListView.Filter = DepartmentsDeletedFilter;
-            ((GridView)depList.View).Columns[2].Width = 0;
-        }
-        #endregion
-
         private void UpdateDailyStatistics()
         {
             if (efContext.Sales.Count() != 0)
@@ -309,7 +198,7 @@ namespace ADO_P201.MainWindows
                     bestManagerCh.Cnt;
                 #endregion
 
-                 //BestManagerTop
+                //BestManagerTop
                 var bestManagerTop = efContext.Managers
                     .GroupJoin(
                         efContext.Sales.Where(s => s.SaleDate.Date == DateTime.Today),
@@ -459,7 +348,130 @@ namespace ADO_P201.MainWindows
 
             }
         }
+        #endregion
 
+        #region CRUD
+        private void GenerateSalesButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Випадковий менеджер з наявних
+            // Manager manager =  // "-" отримання .ToList() передає всі дані, для BigData неприйнятно
+            //    efContext.Managers.ToList()[random.Next(efContext.Managers.Count())];
+            // Manager manager = // System.InvalidOperationException - LINQ-to-Entity перекладає запит на SQL. Не всі 
+            //    efContext.Managers.ElementAt(random.Next(efContext.Managers.Count())); // можливості мови C# мають аналоги у SQL
+            // DbSet приймає методи розширення LINQ, але не всі вони врешті спрацьовують, оскільки
+            //    це LINQ-to-Entity (LINQ-to-SQL), що накладає певні обмеження
 
+            double maxPrice = efContext.Products.Max(p => p.Price);
+            int manCnt = efContext.Managers.Count();
+            int proCnt = efContext.Products.Count();
+
+            for (int i = 0; i < 100; i++)
+            {
+                Manager manager = efContext.Managers.Skip(random.Next(manCnt)).First();
+                // Випадковий товар
+                Product product = efContext.Products.Skip(random.Next(proCnt)).First();
+                // Випадкова кількість, але чим дорожче товар, тим менша гранична кількість
+                int quantity = random.Next(1,
+                    (int)(20 * (1 - product.Price / maxPrice) + 2));
+
+                efContext.Sales.Add(new()
+                {
+                    Id = Guid.NewGuid(),
+                    ManagerId = manager.Id,
+                    ProductId = product.Id,
+                    Quantity = quantity,
+                    SaleDate = DateTime.Today.AddSeconds(random.Next(0, 86400))  // Дата "сьогодні" але з випадковим часом
+                });
+            }
+            efContext.SaveChanges();
+            UpdateMonitor();
+            UpdateDailyStatistics();
+        }
+
+        private void DepartmentItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is ListViewItem item)
+            {
+                if (item.Content is Department department)
+                {
+                    DepartmentCrudWindow dialog = new();
+                    dialog.Department = new Entity.Department()
+                    {
+                        Id = department.Id,
+                        Name = department.Name
+                    };
+                    if (dialog.ShowDialog() == true)
+                    {
+                        if (dialog.Department is null)
+                        {
+                            department.DeleteDt = DateTime.Now;
+                            depListView.Filter = DepartmentsDeletedFilter;
+                            efContext.SaveChanges();
+                        }
+                        else
+                        {
+                            department.Name = dialog.Department.Name;
+                            depList.Items.Refresh();
+                            efContext.SaveChanges();
+                        }
+                    }
+
+                }
+            }
+        }
+
+        private void AddDepartmentButton_Click(object sender, RoutedEventArgs e)
+        {
+            DepartmentCrudWindow dialog = new();
+            if (dialog.ShowDialog() == true)
+            {
+                //dialog.Department -- інша сутність, треба замінити під EF
+                efContext.Departments.Add(
+                    new Department()
+                    {
+                        Name = dialog.Department.Name,
+                        Id = dialog.Department.Id
+                    }
+                    );
+                // !! Додавання даних до контексту не додає їх до БД -- планування додавання
+                efContext.SaveChanges(); // внесення змін до БД
+                UpdateMonitor();
+            }
+        }
+
+        #endregion
+
+        #region FILTER
+        private bool DepartmentsDeletedFilter(object item)
+        {
+            if (item is Department department)
+                return department.DeleteDt == null;
+            return false;
+        }
+
+        private void ShowAllDepsCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            depListView.Filter = null;// скидаємо фільтр -- показує усі дані
+
+            ((GridView)depList.View) // Властивості Visivle для колонок ListView немає, тому
+                .Columns[2]          // приховування/відображення через встановлення Width
+                .Width = Double.NaN; // Double.NaN - автоматичне визначення
+        }
+
+        private void ShowAllDepsCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            //depListView.Filter = //Predicate<object>
+            //    obj => (obj as Department)?.DeleteDt == null;
+            depListView.Filter = DepartmentsDeletedFilter;
+            ((GridView)depList.View).Columns[2].Width = 0;
+        }
+        #endregion
+
+       
+
+        private void AddManagerButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
