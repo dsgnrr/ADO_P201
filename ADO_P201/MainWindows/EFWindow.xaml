@@ -18,14 +18,53 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-
+        <!--Monitor-->
         <StackPanel Orientation="Vertical">
             <Label Content="Monitor"
                    HorizontalAlignment="Center"
                    FontSize="18"/>
-            <TextBlock x:Name="MonitorBlock"/>
+            <Grid ShowGridLines="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.Column="0"
+                       Content="Departments:"
+                       FontSize="18"/>
+                <Label Grid.Row="0" Grid.Column="1"
+                       x:Name="DepMonitor"
+                       FontSize="18"/>
+
+                <Label Grid.Row="1" Grid.Column="0"
+                       Content="Managers:"
+                       FontSize="18"/>
+                <Label Grid.Row="1" Grid.Column="1"
+                       x:Name="ManMonitor"
+                       FontSize="18"/>
+
+                <Label Grid.Row="2" Grid.Column="0"
+                       Content="Products:"
+                       FontSize="18"/>
+                <Label Grid.Row="2" Grid.Column="1"
+                       x:Name="ProdMonitor"
+                       FontSize="18"/>
+
+                <Label Grid.Row="3" Grid.Column="0"
+                       Content="Sales:"
+                       FontSize="18"/>
+                <Label Grid.Row="3" Grid.Column="1"
+                       x:Name="SaleMonitor"
+                       FontSize="18"/>
+            </Grid>
         </StackPanel>
 
+        <!--Departments_ListView-->
         <StackPanel Orientation="Vertical"
                     Grid.Row="0"
                     Grid.Column="1">
@@ -71,6 +110,80 @@
                     </Style>
                 </ListView.Resources>
             </ListView>
+        </StackPanel>
+
+        <!--DailyStatistics-->
+        <StackPanel Orientation="Vertical"
+                    Grid.Row="1"
+                    Grid.Column="0">
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <Label Content="Daily statistics"
+                   HorizontalAlignment="Center"
+                   FontSize="18"/>
+                <Button
+                    Content="+ sales"
+                    FontSize="18"
+                    Margin=" 20 3 0 3"
+                    Padding="7 0 7 4"
+                    x:Name="GenerateSalesButton"
+                    Click="GenerateSalesButton_Click"/>
+            </StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.56*"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0"
+                       Content="Sales checks:"/>
+                <Label Grid.Row="0" Grid.Column="1"
+                       x:Name="SalesChecks"/>
+
+                <Label Grid.Row="1" Grid.Column="0"
+                       Content="Sales pcs:"/>
+                <Label Grid.Row="1" Grid.Column="1"
+                       x:Name="SalesCnt"/>
+
+                <Label Grid.Row="2" Grid.Column="0"
+                       Content="Max check count:"/>
+                <Label Grid.Row="2" Grid.Column="1"
+                       x:Name="MaxCheckCnt"/>
+
+                <Label Grid.Row="3" Grid.Column="0"
+                       Content="Start moment:"/>
+                <Label Grid.Row="3" Grid.Column="1"
+                       x:Name="StartMoment"/>
+
+                <Label Grid.Row="4" Grid.Column="0"
+                       Content="Finish moment:"/>
+                <Label Grid.Row="4" Grid.Column="1"
+                       x:Name="FinishMoment"/>
+
+                <Label Grid.Row="5" Grid.Column="0"
+                       Content="Average pcs:"/>
+                <Label Grid.Row="5" Grid.Column="1"
+                       x:Name="AvgCheckCnt"/>
+
+                <Label Grid.Row="6" Grid.Column="0"
+                       Content="Deleted check count:"/>
+                <Label Grid.Row="6" Grid.Column="1"
+                       x:Name="DeletedCheckCnt"/>
+
+            </Grid>
         </StackPanel>
     </Grid>
 </Window>
