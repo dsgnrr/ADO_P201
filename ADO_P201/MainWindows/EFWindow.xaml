@@ -201,5 +201,59 @@
                        x:Name="BestProductSum"/>
             </Grid>
         </StackPanel>
+
+        <StackPanel Orientation="Vertical"
+                    Grid.Row="1"
+                    Grid.Column="1">
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <Label Content="Daily statistics(Continue)"
+                   HorizontalAlignment="Center"
+                   FontSize="18"/>
+            </StackPanel>
+            <Separator/>
+            <Grid ShowGridLines="True">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                
+
+                <Label Grid.Row="0" Grid.Column="0"
+                       Content="Best Manager By Checks:"/>
+                <Label Grid.Row="0" Grid.Column="1"
+                       x:Name="BestManagerChecks"/>
+
+                <Label Grid.Row="1" Grid.Column="0"
+                       Content="Top 3 Managers By Items:"/>
+                <Label Grid.Row="1" Grid.Column="1"
+                       x:Name="BestManagersTop"
+                       xml:space="preserve" 
+                       Content="1. --&#13;2. --&#13;3. --&#13;"/>
+                
+                <Label Grid.Row="2" Grid.Column="0"
+                       Content="Best Manager By Money:"/>
+                <Label Grid.Row="2" Grid.Column="1"
+                       x:Name="BestManagerMoney"/>
+                <Label Grid.Row="3" Grid.Column="0"
+                       Content="Departments"
+                       FontSize="13"/>
+                <Label Grid.Row="3" Grid.Column="1"
+                       x:Name="Deps"
+                       FontSize="12"
+                       xml:space="preserve" 
+                       Content="1. --&#13;2. --&#13;3. --&#13;"/>
+
+            </Grid>
+        </StackPanel>
     </Grid>
 </Window>

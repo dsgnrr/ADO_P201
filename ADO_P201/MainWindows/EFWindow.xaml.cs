@@ -286,6 +286,176 @@ namespace ADO_P201.MainWindows
                         }
                     ).OrderByDescending(g => g.Sum);
                 BestProductSum.Content = query3.First().Name + " " + query3.First().Sum + "grn.";
+                //////////////////////////////////////////////////////////////////////////////////
+                ///
+                #region BestManagerChecks
+                var bestManagerCh = efContext.Managers
+                    .GroupJoin(
+                        efContext.Sales.Where(s => s.SaleDate.Date == DateTime.Today),
+                        m => m.Id,
+                        s => s.ManagerId,           //  У разі коли у вибірці потрібна
+                        (m, sales) => new           //  комплексна характеристика - нормальна
+                        {                           //  пракитка включати посилання на саму
+                            Manager = m,            //  сутність (Managers = m). У той же час
+                            Cnt = sales.Count()     //  множини (sales) слід обробляти, оскільки
+                        }                           //  це не колекції, а правила запитів, які
+                    )                               //  втрачають контекст після закінчення GroupJoin
+                    .OrderByDescending(g => g.Cnt)
+                    .First(); //  Якщо потрібна множина продаж, то sales.ToList()
+                BestManagerChecks.Content =
+                    bestManagerCh.Manager.Surname + " " +
+                    bestManagerCh.Manager.Name[0] + ". " +
+                    bestManagerCh.Manager.Secname[0] + ". -- " +
+                    bestManagerCh.Cnt;
+                #endregion
+
+                 //BestManagerTop
+                var bestManagerTop = efContext.Managers
+                    .GroupJoin(
+                        efContext.Sales.Where(s => s.SaleDate.Date == DateTime.Today),
+                        m => m.Id,
+                        s => s.ManagerId,
+                        (m, sales) => new
+                        {
+                            Manager = m,
+                            Cnt = sales.Count(),
+                            Quantity = sales.Sum(s => s.Quantity)
+                        }
+                    )
+                    .OrderByDescending(g => g.Quantity)
+                    .Take(3)
+                    .ToList();
+                BestManagersTop.Content = "";
+                int pos = 0;
+                foreach (var manager in bestManagerTop)
+                {
+                    BestManagersTop.Content += $"{pos + 1}. " +
+                    manager.Manager.Surname + " " +
+                    manager.Manager.Name[0] + ". " +
+                    manager.Manager.Secname[0] + ". -- " +
+                    manager.Quantity + "\n";
+                    pos++;
+                }
+
+                //BestManagerMoneySchemeA
+                /*
+                 Cхема A:
+                 Managers		Sales		   Products
+                 Id ----------- ManagerId	   Name
+                  |			 /	ProductId------Id
+                  |			/	Quantity	   Price
+                  |		   /		\           /
+                   GroupJoin	     \	       /
+                    Man			Money = Quantity * Price
+                    Sales
+                 */
+                //BestManagerMoney.Content = "";
+                //var queryMoney = efContext.Managers
+                //   .GroupJoin(
+                //        efContext.Sales
+                //        .Where(s => s.SaleDt.Date == DateTime.Today)
+                //        .Join(
+                //            efContext.Products,
+                //            sale => sale.ProductId,
+                //            product => product.Id,
+                //            (sale, product) => new
+                //            {
+                //                ManagerId = sale.ManagerId,
+                //                CheckSum = sale.Quantity * product.Price
+                //            }),
+                //        m => m.Id,
+                //        s => s.ManagerId,
+                //        (m, pricedChecks) => new
+                //        {
+                //            Manager = m,
+                //            Cnt = pricedChecks.Sum(c => c.CheckSum)
+                //        }
+
+                //    )
+                //   .OrderByDescending(g => g.Cnt)
+                //   .First();
+                //BestManagerMoney.Content =
+                //    queryMoney.Manager.Surname + " " +
+                //    queryMoney.Manager.Name[0] + ". " +
+                //    queryMoney.Manager.Secname[0] + ". -- " +
+                //    queryMoney.Cnt.ToString("0.00") + " UAH";
+
+
+                //BestManagerMoneySchemeB
+                /*
+                 Cхема В:
+                 Managers		Sales
+                  Id	------------- ManagerId
+                  |				/ ProductId
+                  |			   /  Quantity
+                    GroupJoin
+                    Man						Products
+                    Sales					 Name
+                        ProductId --------	 Id
+                        Quantity			 Price
+                                \			/
+                                 \		   /
+                                Money = Quantity * Price
+                 */
+                BestManagerMoney.Content = "";
+                var queryMoney = efContext.Managers
+                   .GroupJoin(
+                        efContext.Sales.Where(s => s.SaleDate.Date == DateTime.Today),
+                         m => m.Id,
+                         s => s.ManagerId,
+                         (m, sales) => new
+                         {
+                             Manager = m,
+                             Cnt = sales
+                                .Join(
+                                    efContext.Products,
+                                    sale => sale.ProductId,
+                                    product => product.Id,
+                                    (sale, product) => sale.Quantity * product.Price)
+                                .Sum()
+                         }
+                    ).OrderByDescending(g => g.Cnt).First();
+                BestManagerMoney.Content =
+                    queryMoney.Manager.Surname + " " +
+                    queryMoney.Manager.Name[0] + ". " +
+                    queryMoney.Manager.Secname[0] + ". -- " +
+                    queryMoney.Cnt.ToString("0.00") + " UAH";
+                /////////////////////////////////////////////////////////////////////////////////////////////
+                ///HOMEWORK
+                var departmentsStats = efContext.Departments.ToList()
+                 .GroupJoin(
+                 efContext.Managers
+                 .GroupJoin(
+                 efContext.Sales,
+                 manager => manager.Id,
+                 sale => sale.ManagerId,
+                 (manager, sales) => new
+                 {
+                     Manager = manager,
+                     Cnt = sales.Count(),
+                     Sum = sales.Sum(s => s.Quantity),
+                     Money = sales.Join(
+                                efContext.Products,
+                                sale => sale.ProductId,
+                                product => product.Id,
+                                (sale, product) => sale.Quantity * product.Price)
+                            .Sum()
+                 }),
+                 d => d.Id,
+                 m => m.Manager.IdMainDep,
+                 (dep, managers) => new
+                 {
+                     Department = dep,
+                     Cnt = managers.Sum(m => m.Cnt),
+                     Sum = managers.Sum(m => m.Sum),
+                     Money = managers.Sum(m => m.Money)
+                 }).OrderByDescending(d => d.Money);
+
+                Deps.Content = "";
+                foreach (var department in departmentsStats)
+                {
+                    Deps.Content += $"{department.Department.Name} -- {department.Cnt} -- {department.Sum} -- {department.Money.ToString("0.00")}\n";
+                }
 
             }
         }
